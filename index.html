@@ -1143,25 +1143,20 @@ function calcularScore() {
 }
 
 /* ════════════════════════════════════
-   ENVIAR WEBHOOK
+   ENVIAR WEBHOOK  (versão corrigida)
 ════════════════════════════════════ */
 function enviarWebhook(tel, first, last, score, eventId) {
   var payload = {
-    // Chaves padrão GHL
     name:       A.nome || '',
     first_name: first,
     last_name:  last,
     phone:      tel,
     email:      A.email || '',
-
-    // Metadados
     timestamp:         new Date().toISOString(),
     origem:            ORIGEM,
     pagina_url:        window.location.href,
     event_id:          eventId,
     score_viabilidade: Number(score.toFixed(1)),
-
-    // Respostas com rótulos legíveis
     procura_tipo:        A.procura_tipo || '',
     procura_tipologia:   A.procura_tipologia || '',
     procura_localizacao: A.procura_localizacao || '',
@@ -1174,25 +1169,38 @@ function enviarWebhook(tel, first, last, score, eventId) {
     capitais_proprios:   A.capitais_proprios || '',
     prazo:               A.prazo || '',
     motivo:              A.motivo || '',
-
-    // Cópia bruta para depuração
     raw: Object.assign({}, A)
   };
 
-  try {
-    fetch(WEBHOOK, {
-      method:    'POST',
-      headers:   { 'Content-Type': 'text/plain;charset=UTF-8' },
-      body:      JSON.stringify(payload),
-      keepalive: true   // ← sobrevive ao redirect
-    });
-  } catch (e) {
-    /* silent fail — lead já guardado no sessionStorage */
+  var json = JSON.stringify(payload);
+  console.log('[Webhook] A enviar →', WEBHOOK);
+  console.log('[Webhook] Payload →', payload);
+
+  // ── Método 1: sendBeacon (mais fiável antes de redirect) ──
+  if (navigator.sendBeacon) {
+    var blob = new Blob([json], { type: 'application/json' });
+    var enviado = navigator.sendBeacon(WEBHOOK, blob);
+    console.log('[Webhook] sendBeacon:', enviado ? 'OK' : 'FALHOU');
+    return;
   }
+
+  // ── Método 2: fetch com keepalive (fallback) ──
+  fetch(WEBHOOK, {
+    method:    'POST',
+    headers:   { 'Content-Type': 'application/json' },
+    body:      json,
+    keepalive: true
+  })
+  .then(function(r) {
+    console.log('[Webhook] fetch status:', r.status);
+  })
+  .catch(function(e) {
+    console.error('[Webhook] fetch erro:', e);
+  });
 }
 
 /* ════════════════════════════════════
-   FINALIZAR — BLOCO 3 (ordem e tempos exatos)
+   FINALIZAR  (versão corrigida)
 ════════════════════════════════════ */
 function finalizar() {
   var btn = document.getElementById('btnVerResultado');
@@ -1206,15 +1214,14 @@ function finalizar() {
   var last    = partes.slice(1).join(' ') || '';
   var eventId = 'lead-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
 
+  // ① Guarda no sessionStorage
   try {
     sessionStorage.setItem(SESS_KEY, JSON.stringify({ A: A, score: score }));
   } catch (e) {}
 
+  // ② Meta Pixel — Advanced Matching
   if (typeof fbq === 'function') {
     fbq('init', PIXEL_ID, { em: A.email, ph: tel, fn: first, ln: last });
-  }
-
-  if (typeof fbq === 'function') {
     fbq('track', 'Lead', {
       content_name:     ORIGEM,
       content_category: 'NR Consultoria',
@@ -1223,16 +1230,13 @@ function finalizar() {
     }, { eventID: eventId });
   }
 
-  // ✅ ADICIONA ESTA LINHA — o keepalive:true garante que o POST sobrevive ao redirect
+  // ③ Envia webhook AQUI (sendBeacon sobrevive ao redirect)
   enviarWebhook(tel, first, last, score, eventId);
 
-  var jaFoi = false;
-  var ir = function () {
-    if (jaFoi) return;
-    jaFoi = true;
+  // ④ Redireciona após 900ms (tempo para pixel + beacon)
+  setTimeout(function() {
     window.location.href = 'resultado.html';
-  };
-  setTimeout(ir, 800);
+  }, 900);
 }
 </script>
 </body>
