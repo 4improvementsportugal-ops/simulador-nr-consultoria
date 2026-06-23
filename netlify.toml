@@ -1,9 +1,0 @@
-# Configuração Netlify
-# Serve os HTML na raiz do repositório e ativa as Functions.
-
-[build]
-  publish = "."
-
-[functions]
-  directory = "netlify/functions"
-  node_bundler = "esbuild"
