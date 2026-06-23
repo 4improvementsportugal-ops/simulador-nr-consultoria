@@ -1195,7 +1195,6 @@ function enviarWebhook(tel, first, last, score, eventId) {
    FINALIZAR — BLOCO 3 (ordem e tempos exatos)
 ════════════════════════════════════ */
 function finalizar() {
-  // Desativa botão para evitar duplo envio
   var btn = document.getElementById('btnVerResultado');
   btn.disabled = true;
   btn.innerHTML = '<div class="spinner"></div> A calcular…';
@@ -1207,17 +1206,14 @@ function finalizar() {
   var last    = partes.slice(1).join(' ') || '';
   var eventId = 'lead-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
 
-  // ① Guarda os dados PRIMEIRO (para a página de resultado os ler)
   try {
     sessionStorage.setItem(SESS_KEY, JSON.stringify({ A: A, score: score }));
-  } catch (e) { /* sem acesso a sessionStorage */ }
+  } catch (e) {}
 
-  // ② Advanced Matching antes do evento (melhora qualidade de correspondência)
   if (typeof fbq === 'function') {
     fbq('init', PIXEL_ID, { em: A.email, ph: tel, fn: first, ln: last });
   }
 
-  // ③ Dispara Lead UMA vez, com eventID (para dedup futura com CAPI)
   if (typeof fbq === 'function') {
     fbq('track', 'Lead', {
       content_name:     ORIGEM,
@@ -1227,11 +1223,9 @@ function finalizar() {
     }, { eventID: eventId });
   }
 
-  // ④ O lead é enviado ao GoHighLevel a partir de resultado.html
-  //    (lá não há redirect a cancelar o POST → mais fiável, sem duplicar).
+  // ✅ ADICIONA ESTA LINHA — o keepalive:true garante que o POST sobrevive ao redirect
+  enviarWebhook(tel, first, last, score, eventId);
 
-  // ⑤ SÓ redireciona DEPOIS de dar tempo ao pixel para enviar o pedido.
-  //    Sem este atraso, o window.location CANCELA o evento do Meta.
   var jaFoi = false;
   var ir = function () {
     if (jaFoi) return;
