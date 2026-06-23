@@ -648,6 +648,12 @@ body{
 <script>
 'use strict';
 
+/* ── Constantes ── */
+var WEBHOOK    = 'https://services.leadconnectorhq.com/hooks/pendhQu9igeJQUitYLuK/webhook-trigger/5eD4U41jrhiL2uy6tBdX';
+var ORIGEM     = 'ORIGEM_AQUI';
+var PREFIXO    = '351';
+var WH_FLAG    = 'sim_nrconsultoria_wh';  // trava anti-duplicação por sessão
+
 /* ── Ler dados do sessionStorage ── */
 var dados, A, score;
 try {
@@ -690,12 +696,84 @@ function getFrase(s) {
   return 'O seu perfil apresenta alguns pontos a reforçar antes de avançar. Com uma estratégia bem definida e acompanhamento especializado, é possível preparar a transição com total segurança.';
 }
 
+/* ── Normalizar telefone (igual ao index) ── */
+function normalizarTel(v) {
+  var d = (v || '').replace(/\D/g, '');
+  if (!d) return '';
+  if (d.indexOf('00') === 0) d = d.slice(2);  // 00351… → 351…
+  if (d.length === 9) d = PREFIXO + d;         // nº local → com indicativo
+  return '+' + d;
+}
+
+/* ── Enviar webhook (GoHighLevel) ─────────────────
+   Reenvia o lead a partir da página de resultado, onde
+   já não há redirect a cancelar o pedido. A trava WH_FLAG
+   garante UM envio por sessão, mesmo com refresh. */
+function enviarWebhook() {
+  // Trava anti-duplicação por sessão
+  try {
+    if (sessionStorage.getItem(WH_FLAG)) return;
+    sessionStorage.setItem(WH_FLAG, '1');
+  } catch (e) { /* sem sessionStorage — segue na mesma */ }
+
+  var tel    = normalizarTel(A.tel);
+  var partes = (A.nome || '').trim().split(/\s+/);
+  var first  = partes[0] || '';
+  var last   = partes.slice(1).join(' ') || '';
+
+  var payload = {
+    // Chaves padrão GHL
+    name:       A.nome || '',
+    first_name: first,
+    last_name:  last,
+    phone:      tel,
+    email:      A.email || '',
+
+    // Metadados
+    timestamp:         new Date().toISOString(),
+    origem:            ORIGEM,
+    pagina_url:        window.location.href,
+    score_viabilidade: Number(score.toFixed(1)),
+
+    // Respostas com rótulos legíveis
+    procura_tipo:        A.procura_tipo || '',
+    procura_tipologia:   A.procura_tipologia || '',
+    procura_localizacao: A.procura_localizacao || '',
+    vender_tipo:         A.vender_tipo || '',
+    vender_tipologia:    A.vender_tipologia || '',
+    vender_estado:       A.vender_estado || '',
+    vender_zona:         A.vender_zona || '',
+    credito_habitacao:   A.credito || '',
+    credito_capital:     A.credito_capital || '',
+    capitais_proprios:   A.capitais_proprios || '',
+    prazo:               A.prazo || '',
+    motivo:              A.motivo || '',
+
+    // Cópia bruta para depuração
+    raw: Object.assign({}, A)
+  };
+
+  try {
+    fetch(WEBHOOK, {
+      method:    'POST',
+      headers:   { 'Content-Type': 'text/plain;charset=UTF-8' },
+      body:      JSON.stringify(payload),
+      keepalive: true
+    });
+  } catch (e) {
+    /* silent fail — lead já guardado no sessionStorage */
+  }
+}
+
 /* ── Preencher DOM ── */
 document.addEventListener('DOMContentLoaded', function () {
   if (!A || score === undefined) {
     window.location.replace('index.html');
     return;
   }
+
+  /* Reenvia o lead ao GoHighLevel a partir do resultado */
+  enviarWebhook();
 
   var badge = getBadge(score);
 
