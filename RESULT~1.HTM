@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>O seu resultado · NR Consultoria Imobiliária</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Meta Pixel Code — PageView APENAS (o Lead foi disparado no index) -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','2486306185154369');
+fbq('track','PageView');
+/* NÃO disparar Lead aqui — já foi disparado no index com eventID único.
+   O PageView deste URL /resultado alimenta a CONVERSÃO PERSONALIZADA POR URL. */
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2486306185154369&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel Code -->
+
+<!-- Verificar sessionStorage antes de renderizar
+     Se não houver dados → redirect para evitar conversões falsas -->
+<script>
+(function () {
+  try {
+    var raw = sessionStorage.getItem('sim_nrconsultoria');
+    if (!raw) { window.location.replace('index.html'); }
+  } catch (e) {
+    window.location.replace('index.html');
+  }
+})();
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --vermelho:#b50103;
+  --vermelho-escuro:#8f0002;
+  --carvao:#3c3c3c;
+  --branco:#ffffff;
+  --cinza-fundo:#f4f4f5;
+  --cinza-borda:#e4e4e7;
+  --cinza-texto:#71717a;
+  --cinza-medio:#52525b;
+  --verde:#15803d;
+  --ambar:#b45309;
+  --rosa-escuro:#9f1239;
+  --wa:#25d366;
+  --radius:12px;
+  --radius-pill:100px;
+  --sombra:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.07);
+  --sombra-hover:0 4px 12px rgba(0,0,0,.1),0 12px 32px rgba(0,0,0,.1);
+  --trans:all .2s cubic-bezier(.4,0,.2,1);
+}
+
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--cinza-fundo);
+  color:var(--carvao);
+  line-height:1.6;
+  min-height:100vh;
+}
+
+/* ════════════════════════════════════
+   HEADER
+════════════════════════════════════ */
+.res-header{
+  background:var(--branco);
+  border-bottom:1px solid var(--cinza-borda);
+  padding:14px 24px;
+}
+.res-header__inner{
+  max-width:700px;margin:0 auto;
+  display:flex;align-items:center;gap:10px;
+}
+.hdr-badge{
+  width:34px;height:34px;
+  background:var(--vermelho);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;
+  font-weight:700;font-size:14px;color:#fff;
+  flex-shrink:0;
+}
+.hdr-nome{
+  font-size:13px;font-weight:600;
+  color:var(--cinza-medio);
+  letter-spacing:.08em;text-transform:uppercase;
+}
+
+/* ════════════════════════════════════
+   HERO DO RESULTADO
+════════════════════════════════════ */
+.res-hero{
+  background:linear-gradient(155deg,#090000 0%,#1e0001 30%,#6b0102 65%,#b50103 100%);
+  padding:48px 24px 56px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.res-hero::before{
+  content:'';
+  position:absolute;inset:0;
+  background:url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=900&q=85') center/cover;
+  opacity:.08;pointer-events:none;
+}
+.res-hero__inner{
+  position:relative;z-index:1;
+  max-width:600px;margin:0 auto;
+}
+
+.res-hero__intro{
+  font-size:13px;font-weight:500;
+  color:rgba(255,255,255,.6);
+  letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:6px;
+}
+.res-hero__saudacao{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(14px,3vw,17px);
+  font-weight:600;color:rgba(255,255,255,.8);
+  margin-bottom:28px;
+}
+.res-hero__saudacao strong{color:#fff}
+
+/* Badge de classificação */
+.badge{
+  display:inline-block;
+  padding:6px 20px;
+  border-radius:var(--radius-pill);
+  font-size:13px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:#fff;margin-bottom:20px;
+}
+
+/* Score número */
+.score-numero{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(64px,14vw,96px);
+  font-weight:700;color:#fff;
+  line-height:1;
+  letter-spacing:-.03em;
+}
+.score-dez{
+  font-size:clamp(28px,6vw,42px);
+  color:rgba(255,255,255,.55);
+  font-weight:600;
+}
+
+/* Score bar */
+.score-bar-wrap{
+  max-width:380px;margin:20px auto 0;
+}
+.score-bar-bg{
+  height:8px;background:rgba(255,255,255,.18);
+  border-radius:var(--radius-pill);overflow:hidden;
+}
+.score-bar-fill{
+  height:100%;width:0;
+  background:linear-gradient(90deg,rgba(255,255,255,.6) 0%,#fff 100%);
+  border-radius:var(--radius-pill);
+  transition:width .9s cubic-bezier(.4,0,.2,1);
+}
+.score-bar-labels{
+  display:flex;justify-content:space-between;
+  margin-top:6px;
+}
+.score-bar-labels span{
+  font-size:11px;color:rgba(255,255,255,.45);
+}
+
+/* Frase de apoio */
+.res-hero__frase{
+  font-size:clamp(14px,3vw,16px);
+  color:rgba(255,255,255,.78);
+  line-height:1.65;
+  max-width:480px;margin:24px auto 0;
+}
+
+/* ════════════════════════════════════
+   CORPO DO RESULTADO
+════════════════════════════════════ */
+.res-body{
+  max-width:700px;margin:0 auto;
+  padding:32px 20px 64px;
+}
+
+/* ── Cards: Prazo + Motivo ── */
+.cards-row{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  margin-bottom:32px;
+}
+@media(max-width:420px){.cards-row{grid-template-columns:1fr}}
+
+.card{
+  background:var(--branco);
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:var(--sombra);
+  display:flex;flex-direction:column;gap:4px;
+}
+.card__icon{font-size:22px;margin-bottom:6px}
+.card__label{
+  font-size:11px;font-weight:600;
+  color:var(--cinza-texto);
+  text-transform:uppercase;letter-spacing:.07em;
+}
+.card__valor{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(16px,3vw,20px);
+  font-weight:700;color:var(--carvao);
+  line-height:1.25;
+}
+
+/* ── Separador ── */
+.sep{
+  border:none;border-top:1px solid var(--cinza-borda);
+  margin:32px 0;
+}
+
+/* ── Secção títulos ── */
+.sec-titulo{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(18px,3.5vw,22px);
+  font-weight:700;color:var(--carvao);
+  margin-bottom:20px;
+}
+
+/* ── Quote ── */
+.quote-block{
+  background:var(--branco);
+  border-left:4px solid var(--vermelho);
+  border-radius:0 var(--radius) var(--radius) 0;
+  padding:20px 24px;
+  box-shadow:var(--sombra);
+  margin-bottom:32px;
+}
+.quote-block p{
+  font-family:'Playfair Display',serif;
+  font-style:italic;
+  font-size:clamp(15px,2.5vw,17px);
+  color:var(--carvao);
+  line-height:1.7;
+  margin-bottom:10px;
+}
+.quote-block cite{
+  font-size:12px;font-weight:600;
+  color:var(--cinza-texto);
+  font-style:normal;
+  letter-spacing:.06em;text-transform:uppercase;
+}
+
+/* ── Timeline ── */
+.timeline{
+  display:flex;flex-direction:column;gap:0;
+  margin-bottom:4px;
+}
+.timeline-item{
+  display:flex;gap:18px;
+  position:relative;
+  padding-bottom:28px;
+}
+.timeline-item:last-child{padding-bottom:0}
+.timeline-left{
+  display:flex;flex-direction:column;
+  align-items:center;flex-shrink:0;
+}
+.timeline-num{
+  width:36px;height:36px;
+  background:var(--vermelho);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;
+  font-weight:700;font-size:14px;color:#fff;
+  flex-shrink:0;
+  position:relative;z-index:1;
+}
+.timeline-line{
+  width:2px;flex:1;
+  background:var(--cinza-borda);
+  margin:4px 0;
+}
+.timeline-item:last-child .timeline-line{display:none}
+.timeline-content{padding-top:6px}
+.timeline-etapa{
+  font-size:11px;font-weight:600;
+  color:var(--cinza-texto);
+  text-transform:uppercase;letter-spacing:.07em;
+  margin-bottom:3px;
+}
+.timeline-titulo{
+  font-family:'Playfair Display',serif;
+  font-size:16px;font-weight:700;color:var(--carvao);
+  margin-bottom:5px;
+}
+.timeline-desc{
+  font-size:14px;color:var(--cinza-medio);line-height:1.6;
+}
+
+/* ── Considerações ── */
+.avisos{
+  display:flex;flex-direction:column;gap:14px;
+  margin-top:4px;
+}
+.aviso{
+  background:var(--branco);
+  border-radius:var(--radius);
+  padding:20px 20px 20px 24px;
+  box-shadow:var(--sombra);
+  display:flex;gap:16px;align-items:flex-start;
+}
+.aviso__num{
+  font-family:'Playfair Display',serif;
+  font-weight:700;font-size:22px;
+  color:var(--cinza-borda);
+  line-height:1;flex-shrink:0;
+  padding-top:2px;
+  min-width:28px;
+}
+.aviso__body{}
+.aviso__titulo{
+  font-size:14px;font-weight:700;color:var(--carvao);
+  margin-bottom:4px;
+}
+.aviso__desc{font-size:14px;color:var(--cinza-medio);line-height:1.6}
+
+/* ════════════════════════════════════
+   CTA
+════════════════════════════════════ */
+.cta-section{
+  background:var(--branco);
+  border-radius:var(--radius);
+  padding:32px 24px;
+  box-shadow:var(--sombra);
+  text-align:center;
+  margin-top:32px;
+}
+.cta-section h3{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(18px,3.5vw,22px);
+  font-weight:700;color:var(--carvao);
+  margin-bottom:8px;
+}
+.cta-section p{
+  font-size:14px;color:var(--cinza-texto);
+  margin-bottom:28px;
+  max-width:400px;margin-left:auto;margin-right:auto;
+}
+
+.btn-wa{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;max-width:380px;margin:0 auto 12px;
+  padding:17px 24px;
+  background:var(--wa);border:none;border-radius:var(--radius-pill);
+  font-family:'Inter',sans-serif;
+  font-size:16px;font-weight:700;color:#fff;
+  text-decoration:none;
+  cursor:pointer;transition:var(--trans);
+  box-shadow:0 4px 16px rgba(37,211,102,.3);
+}
+.btn-wa:hover{
+  background:#1ebe5d;
+  transform:translateY(-1px);
+  box-shadow:0 6px 24px rgba(37,211,102,.4);
+}
+.btn-wa svg{width:22px;height:22px;flex-shrink:0}
+
+.cta-row{
+  display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+  margin-top:4px;
+}
+.btn-outline{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 22px;
+  background:transparent;
+  border:2px solid var(--cinza-borda);
+  border-radius:var(--radius-pill);
+  font-family:'Inter',sans-serif;
+  font-size:14px;font-weight:600;color:var(--carvao);
+  text-decoration:none;
+  cursor:pointer;transition:var(--trans);
+}
+.btn-outline:hover{
+  border-color:var(--vermelho);
+  color:var(--vermelho);
+}
+
+/* ════════════════════════════════════
+   FOOTER
+════════════════════════════════════ */
+.res-footer{
+  text-align:center;
+  padding:24px 20px;
+  font-size:12px;color:var(--cinza-texto);
+  border-top:1px solid var(--cinza-borda);
+  background:var(--branco);
+}
+.res-footer a{color:var(--cinza-texto);text-decoration:none}
+.res-footer a:hover{color:var(--vermelho)}
+
+/* ════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════ */
+@media(max-width:480px){
+  .res-body{padding:24px 16px 56px}
+  .aviso{padding:16px 16px 16px 18px}
+  .cta-section{padding:24px 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════ HEADER ════════════ -->
+<header class="res-header">
+  <div class="res-header__inner">
+    <div class="hdr-badge" aria-hidden="true">NR</div>
+    <span class="hdr-nome">NR Consultoria Imobiliária</span>
+  </div>
+</header>
+
+<!-- ════════════ HERO RESULTADO ════════════ -->
+<section class="res-hero">
+  <div class="res-hero__inner">
+
+    <p class="res-hero__intro">O seu resultado</p>
+    <p class="res-hero__saudacao" id="saudacao">
+      O seu perfil de viabilidade é:
+    </p>
+
+    <span class="badge" id="badge">…</span>
+
+    <div>
+      <span class="score-numero" id="scoreNum">0</span>
+      <span class="score-dez">&nbsp;/ 10</span>
+    </div>
+
+    <div class="score-bar-wrap" role="progressbar"
+         aria-label="Score de viabilidade" aria-valuemin="0" aria-valuemax="10">
+      <div class="score-bar-bg">
+        <div class="score-bar-fill" id="scoreBar"></div>
+      </div>
+      <div class="score-bar-labels">
+        <span>0</span>
+        <span>5</span>
+        <span>10</span>
+      </div>
+    </div>
+
+    <p class="res-hero__frase" id="frase"></p>
+
+  </div>
+</section>
+
+<!-- ════════════ CORPO ════════════ -->
+<main class="res-body">
+
+  <!-- Cards Prazo + Motivo -->
+  <div class="cards-row">
+    <div class="card">
+      <span class="card__icon" aria-hidden="true">⏱</span>
+      <span class="card__label">Prazo indicado</span>
+      <span class="card__valor" id="cardPrazo">—</span>
+    </div>
+    <div class="card">
+      <span class="card__icon" aria-hidden="true">💡</span>
+      <span class="card__label">Motivo principal</span>
+      <span class="card__valor" id="cardMotivo">—</span>
+    </div>
+  </div>
+
+  <!-- Quote -->
+  <blockquote class="quote-block">
+    <p>
+      "A troca de casa é um dos maiores movimentos financeiros da vida.
+      Com as decisões certas e o acompanhamento de um consultor experiente,
+      o processo torna-se mais simples, seguro e vantajoso."
+    </p>
+    <cite>NR Consultoria Imobiliária</cite>
+  </blockquote>
+
+  <hr class="sep">
+
+  <!-- Timeline -->
+  <h2 class="sec-titulo">O processo de troca de casa</h2>
+  <div class="timeline" role="list">
+
+    <div class="timeline-item" role="listitem">
+      <div class="timeline-left">
+        <div class="timeline-num">1</div>
+        <div class="timeline-line"></div>
+      </div>
+      <div class="timeline-content">
+        <p class="timeline-etapa">Etapa 1</p>
+        <p class="timeline-titulo">Avaliação do imóvel atual</p>
+        <p class="timeline-desc">
+          Compreender o valor real do que tem para vender é o ponto de partida.
+          Uma avaliação rigorosa define o seu poder negocial e evita surpresas durante o processo.
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item" role="listitem">
+      <div class="timeline-left">
+        <div class="timeline-num">2</div>
+        <div class="timeline-line"></div>
+      </div>
+      <div class="timeline-content">
+        <p class="timeline-etapa">Etapa 2</p>
+        <p class="timeline-titulo">Definição da estratégia</p>
+        <p class="timeline-desc">
+          Vender primeiro ou comprar primeiro? A resposta depende da sua situação financeira
+          e das condições do mercado — é aqui que a consultoria especializada faz toda a diferença.
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item" role="listitem">
+      <div class="timeline-left">
+        <div class="timeline-num">3</div>
+        <div class="timeline-line"></div>
+      </div>
+      <div class="timeline-content">
+        <p class="timeline-etapa">Etapa 3</p>
+        <p class="timeline-titulo">Escritura e mudança</p>
+        <p class="timeline-desc">
+          Com as negociações concluídas, coordenamos as duas escrituras para que
+          a transição seja fluida, sem sobreposição de encargos nem períodos em vazio.
+        </p>
+      </div>
+    </div>
+
+  </div><!-- /timeline -->
+
+  <hr class="sep">
+
+  <!-- O que deve considerar -->
+  <h2 class="sec-titulo">O que deve considerar antes de avançar</h2>
+  <div class="avisos">
+
+    <div class="aviso">
+      <span class="aviso__num" aria-hidden="true">01</span>
+      <div class="aviso__body">
+        <p class="aviso__titulo">Conheça o valor real do seu imóvel</p>
+        <p class="aviso__desc">
+          Não assuma o valor — confirme-o. Uma avaliação profissional pode fazer
+          diferença de dezenas de milhares de euros no seu poder de negociação
+          e na estratégia que vai definir.
+        </p>
+      </div>
+    </div>
+
+    <div class="aviso">
+      <span class="aviso__num" aria-hidden="true">02</span>
+      <div class="aviso__body">
+        <p class="aviso__titulo">Calcule todos os encargos</p>
+        <p class="aviso__desc">
+          IMT, imposto de selo, registos e comissões podem representar entre 3% e 8%
+          do valor do imóvel. Há surpresas que uma boa preparação antecipada evita
+          — e que podem impactar diretamente a sua margem financeira.
+        </p>
+      </div>
+    </div>
+
+    <div class="aviso">
+      <span class="aviso__num" aria-hidden="true">03</span>
+      <div class="aviso__body">
+        <p class="aviso__titulo">Crédito habitação</p>
+        <p class="aviso__desc" id="aviso-credito">
+          <!-- Preenchido dinamicamente pelo JS -->
+        </p>
+      </div>
+    </div>
+
+  </div><!-- /avisos -->
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <h3>Pronto para dar o próximo passo?</h3>
+    <p>
+      Fale com um consultor da NR Consultoria e perceba exatamente
+      como avançar com segurança para a sua próxima casa.
+    </p>
+
+    <a class="btn-wa"
+       href="https://wa.me/351912798097?text=Ol%C3%A1%2C%20fiz%20o%20simulador%20e%20queria%20falar%20sobre%20a%20minha%20situa%C3%A7%C3%A3o"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="Abrir conversa no WhatsApp">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94
+        1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+        <path d="M12.004 2.003C6.48 2.003 2 6.483 2 12.007c0 1.772.463 3.501 1.345 5.019L2 22l5.09-1.33A9.96 9.96 0 0012.004 22C17.527 22 22 17.52 22 11.996c0-2.666-1.037-5.172-2.92-7.056A9.928 9.928 0 0012.004 2.003zm0 18.18a8.154 8.154 0 01-4.158-1.142l-.298-.178-3.09.809.826-3.015-.194-.31A8.16 8.16 0 013.845 12c0-4.498 3.661-8.16 8.159-8.16 2.18 0 4.226.85 5.766 2.39a8.114 8.114 0 012.39 5.77c0 4.499-3.663 8.163-8.156 8.163z"/>
+      </svg>
+      Falar com um consultor no WhatsApp
+    </a>
+
+    <div class="cta-row">
+      <a class="btn-outline" href="tel:+351912798097" aria-label="Ligar para NR Consultoria">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.86
+          6.86 19.79 19.79 0 01.79 2.23 2 2 0 012.8.04h3a2 2 0 012 1.72 12.84 12.84 0 00.7
+          2.81 2 2 0 01-.45 2.11L6.91 7.91A16 16 0 0016.09 17.1l1.27-1.27a2 2 0 012.11-.45
+          12.84 12.84 0 002.81.7 2 2 0 011.72 2z"/>
+        </svg>
+        Ligar agora
+      </a>
+      <a class="btn-outline"
+         href="https://www.instagram.com/nr_consultoria.imobiliaria/"
+         target="_blank"
+         rel="noopener noreferrer"
+         aria-label="Perfil Instagram NR Consultoria">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+        </svg>
+        Instagram
+      </a>
+    </div>
+
+  </div><!-- /cta-section -->
+
+</main><!-- /res-body -->
+
+<!-- ════════════ FOOTER ════════════ -->
+<footer class="res-footer">
+  <p>
+    © 2026 NR Consultoria Imobiliária · Todos os direitos reservados ·
+    <a href="index.html">Refazer o simulador</a>
+  </p>
+</footer>
+
+<!-- ════════════ JAVASCRIPT ════════════ -->
+<script>
+'use strict';
+
+/* ── Constantes ── */
+var LEAD_ENDPOINT = '/.netlify/functions/lead';   // mesmo proxy do index
+var ORIGEM        = 'Simulador NR - Facebook Ads';
+var PREFIXO       = '351';
+var WH_OK_KEY     = 'sim_nrconsultoria_wh_ok';     // sucesso confirmado (definido no index)
+var WH_TRIED_KEY  = 'sim_nrconsultoria_wh_tried';  // já tentámos o reenvio aqui
+
+/* ── Ler dados do sessionStorage ── */
+var dados, A, score;
+try {
+  var raw = sessionStorage.getItem('sim_nrconsultoria');
+  dados   = JSON.parse(raw);
+  A       = dados.A;
+  score   = dados.score;
+} catch (e) {
+  window.location.replace('index.html');
+}
+
+/* ── Helpers ── */
+function primeiroNome(nome) {
+  return ((nome || '').trim().split(/\s+/)[0]) || 'Caro utilizador';
+}
+
+function labelPrazo(v) {
+  if (v === 'O mais rápido possível') return 'O mais rápido possível';
+  if (v === '<3 meses')               return 'Menos de 3 meses';
+  if (v === '3–6 meses')              return '3 a 6 meses';
+  if (v === '>6 meses')               return 'Mais de 6 meses';
+  return v || '—';
+}
+
+function labelMotivo(v) {
+  if (v === 'Família/espaço')              return 'Família e espaço';
+  if (v === 'Upgrade qualidade de vida')   return 'Upgrade de qualidade de vida';
+  return v || '—';
+}
+
+function getBadge(s) {
+  if (s >= 8) return { texto: 'Excelente',  cor: 'var(--verde)'      };
+  if (s >= 6) return { texto: 'Bom',         cor: 'var(--ambar)'     };
+  return         { texto: 'Moderado',    cor: 'var(--rosa-escuro)' };
+}
+
+function getFrase(s) {
+  if (s >= 8) return 'Está muito bem posicionado para avançar com confiança. O seu perfil financeiro e o prazo disponível criam condições favoráveis para uma transição bem-sucedida.';
+  if (s >= 6) return 'Tem boas condições para avançar, com alguns pontos a afinar. Com o apoio certo, é possível otimizar o processo e reduzir os riscos ao mínimo.';
+  return 'O seu perfil apresenta alguns pontos a reforçar antes de avançar. Com uma estratégia bem definida e acompanhamento especializado, é possível preparar a transição com total segurança.';
+}
+
+/* ── Normalizar telefone (igual ao index) ── */
+function normalizarTel(v) {
+  var d = (v || '').replace(/\D/g, '');
+  if (!d) return '';
+  if (d.indexOf('00') === 0) d = d.slice(2);  // 00351… → 351…
+  if (d.length === 9) d = PREFIXO + d;         // nº local → com indicativo
+  return '+' + d;
+}
+
+/* ── Constrói payload mínimo se o index não o tiver guardado ── */
+function construirPayloadMin() {
+  var tel    = normalizarTel(A.tel);
+  var partes = (A.nome || '').trim().split(/\s+/);
+  return {
+    name:       A.nome || '',
+    first_name: partes[0] || '',
+    last_name:  partes.slice(1).join(' ') || '',
+    phone:      tel,
+    email:      A.email || '',
+    timestamp:         new Date().toISOString(),
+    origem:            ORIGEM,
+    pagina_url:        window.location.href,
+    score_viabilidade: Number((score || 0).toFixed(1)),
+    procura_tipo:        A.procura_tipo || '',
+    procura_tipologia:   A.procura_tipologia || '',
+    procura_localizacao: A.procura_localizacao || '',
+    vender_tipo:         A.vender_tipo || '',
+    vender_tipologia:    A.vender_tipologia || '',
+    vender_estado:       A.vender_estado || '',
+    vender_zona:         A.vender_zona || '',
+    credito_habitacao:   A.credito || '',
+    credito_capital:     A.credito_capital || '',
+    capitais_proprios:   A.capitais_proprios || '',
+    prazo:               A.prazo || '',
+    motivo:              A.motivo || '',
+    raw: Object.assign({}, A)
+  };
+}
+
+/* ── Fallback de envio ─────────────────────────────────
+   Só envia se o index NÃO confirmou sucesso. Assim, no
+   caminho normal o lead vai 1x (do index); aqui só corre
+   se o envio do index falhou ou não chegou a confirmar.   */
+function enviarLeadFallback() {
+  try {
+    if (sessionStorage.getItem(WH_OK_KEY) === '1')    return; // já entregue no index
+    if (sessionStorage.getItem(WH_TRIED_KEY) === '1') return; // já tentámos aqui
+    sessionStorage.setItem(WH_TRIED_KEY, '1');
+  } catch (e) {}
+
+  var payload = (dados && dados.payload) ? dados.payload : construirPayloadMin();
+
+  fetch(LEAD_ENDPOINT, {
+    method:    'POST',
+    headers:   { 'Content-Type': 'application/json' },
+    body:      JSON.stringify(payload),
+    keepalive: true
+  }).then(function (r) {
+    try { if (r && r.ok) sessionStorage.setItem(WH_OK_KEY, '1'); } catch (e) {}
+    console.log('[Lead] fallback proxy:', r && r.status);
+  }).catch(function (e) {
+    console.warn('[Lead] fallback falhou:', e);
+  });
+}
+
+/* ── Preencher DOM ── */
+document.addEventListener('DOMContentLoaded', function () {
+  if (!A || score === undefined) {
+    window.location.replace('index.html');
+    return;
+  }
+
+  /* Reenvia o lead SÓ se o index não tiver confirmado a entrega */
+  enviarLeadFallback();
+
+  var badge = getBadge(score);
+
+  /* Saudação */
+  document.getElementById('saudacao').innerHTML =
+    '<strong>' + primeiroNome(A.nome) + '</strong>, o seu perfil de viabilidade é:';
+
+  /* Badge */
+  var badgeEl = document.getElementById('badge');
+  badgeEl.textContent        = badge.texto;
+  badgeEl.style.background   = badge.cor;
+
+  /* Score número */
+  document.getElementById('scoreNum').textContent = score.toFixed(1);
+
+  /* Score bar (animada com delay) */
+  setTimeout(function () {
+    document.getElementById('scoreBar').style.width = (score / 10 * 100).toFixed(1) + '%';
+  }, 350);
+
+  /* Frase */
+  document.getElementById('frase').textContent = getFrase(score);
+
+  /* Cards */
+  document.getElementById('cardPrazo').textContent  = labelPrazo(A.prazo);
+  document.getElementById('cardMotivo').textContent = labelMotivo(A.motivo);
+
+  /* Aviso crédito — texto adapta-se ao estado do crédito */
+  var creditoEl = document.getElementById('aviso-credito');
+  if (A.credito === 'Sim') {
+    creditoEl.textContent =
+      'Tem crédito habitação ativo. Antes de avançar, clarifique com o seu banco as condições ' +
+      'de portabilidade ou liquidação antecipada — taxas de penalização, prazos e condições de ' +
+      'transferência são decisivos para definir a estratégia mais vantajosa.';
+  } else {
+    creditoEl.textContent =
+      'O seu imóvel está pago, o que lhe confere uma vantagem real de flexibilidade financeira. ' +
+      'Para a nova aquisição, prepare antecipadamente o processo de aprovação de crédito: ' +
+      'histórico financeiro, taxa de esforço e documentação têm de estar em ordem para agilizar a aprovação.';
+  }
+});
+</script>
+</body>
+</html>

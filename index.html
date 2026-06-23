@@ -900,12 +900,13 @@ body{
 'use strict';
 
 /* ── Constantes ── */
-var PIXEL_ID   = '2486306185154369';
-var WEBHOOK    = 'https://services.leadconnectorhq.com/hooks/pendhQu9igeJQUitYLuK/webhook-trigger/da091c6c-a4c7-4471-9d03-5071621b41ae';
-var ORIGEM     = 'Simulador NR - Facebook Ads';
-var PREFIXO    = '351';
-var SESS_KEY   = 'sim_nrconsultoria';
-var TOTAL_P    = 5;
+var PIXEL_ID      = '2486306185154369';
+var LEAD_ENDPOINT = '/.netlify/functions/lead';   // proxy same-origin (não é bloqueado por ad-blockers)
+var ORIGEM        = 'Simulador NR - Facebook Ads';
+var PREFIXO       = '351';
+var SESS_KEY      = 'sim_nrconsultoria';
+var WH_OK_KEY     = 'sim_nrconsultoria_wh_ok';     // marca que o lead já foi entregue com sucesso
+var TOTAL_P       = 5;
 
 /* ── Estado global ── */
 var A          = {};
@@ -1143,59 +1144,52 @@ function calcularScore() {
 }
 
 /* ════════════════════════════════════
-   ENVIAR WEBHOOK  (versão corrigida)
+   CONSTRUIR PAYLOAD DO LEAD
 ════════════════════════════════════ */
-function enviarWebhook(tel, first, last, score, eventId) {
-  var payload = {
-    name:       A.nome || '',
-    first_name: first,
-    last_name:  last,
-    phone:      tel,
-    email:      A.email || '',
-    timestamp:         new Date().toISOString(),
-    origem:            ORIGEM,
-    pagina_url:        window.location.href,
-    event_id:          eventId,
-    score_viabilidade: Number(score.toFixed(1)),
-    procura_tipo:        A.procura_tipo || '',
-    procura_tipologia:   A.procura_tipologia || '',
-    procura_localizacao: A.procura_localizacao || '',
-    vender_tipo:         A.vender_tipo || '',
-    vender_tipologia:    A.vender_tipologia || '',
-    vender_estado:       A.vender_estado || '',
-    vender_zona:         A.vender_zona || '',
-    credito_habitacao:   A.credito || '',
-    credito_capital:     A.credito_capital || '',
-    capitais_proprios:   A.capitais_proprios || '',
-    prazo:               A.prazo || '',
-    motivo:              A.motivo || '',
-    raw: Object.assign({}, A)
-  };
-  var json = JSON.stringify(payload);
-  console.log('[Webhook] A enviar →', WEBHOOK);
-
-  // text/plain → sem preflight CORS → sobrevive ao redirect
-  if (navigator.sendBeacon) {
-    var blob = new Blob([json], { type: 'text/plain;charset=UTF-8' });
-    if (navigator.sendBeacon(WEBHOOK, blob)) {
-      console.log('[Webhook] sendBeacon: OK');
-      return;
-    }
-    console.warn('[Webhook] sendBeacon falhou a enfileirar, a usar fetch…');
-  }
-
-  // fallback: no-cors garante o envio (resposta fica opaca, mas chega)
-  fetch(WEBHOOK, {
-    method:    'POST',
-    headers:   { 'Content-Type': 'text/plain;charset=UTF-8' },
-    body:      json,
-    keepalive: true,
-    mode:      'no-cors'
-  }).catch(function (e) { console.error('[Webhook] fetch erro:', e); });
+function construirPayload(tel, first, last, score, eventId) {
+  return {
+    name:       A.nome || '',
+    first_name: first,
+    last_name:  last,
+    phone:      tel,
+    email:      A.email || '',
+    timestamp:         new Date().toISOString(),
+    origem:            ORIGEM,
+    pagina_url:        window.location.href,
+    event_id:          eventId,
+    score_viabilidade: Number(score.toFixed(1)),
+    procura_tipo:        A.procura_tipo || '',
+    procura_tipologia:   A.procura_tipologia || '',
+    procura_localizacao: A.procura_localizacao || '',
+    vender_tipo:         A.vender_tipo || '',
+    vender_tipologia:    A.vender_tipologia || '',
+    vender_estado:       A.vender_estado || '',
+    vender_zona:         A.vender_zona || '',
+    credito_habitacao:   A.credito || '',
+    credito_capital:     A.credito_capital || '',
+    capitais_proprios:   A.capitais_proprios || '',
+    prazo:               A.prazo || '',
+    motivo:              A.motivo || '',
+    raw: Object.assign({}, A)
+  };
 }
 
 /* ════════════════════════════════════
-   FINALIZAR  (versão corrigida)
+   ENVIAR LEAD  →  Netlify Function (same-origin)
+   O pedido vai para o próprio domínio, por isso NÃO é
+   bloqueado por ad-blockers; a função reencaminha ao GHL.
+════════════════════════════════════ */
+function enviarLead(payload) {
+  return fetch(LEAD_ENDPOINT, {
+    method:    'POST',
+    headers:   { 'Content-Type': 'application/json' },
+    body:      JSON.stringify(payload),
+    keepalive: true   // sobrevive ao redirect para resultado.html
+  });
+}
+
+/* ════════════════════════════════════
+   FINALIZAR
 ════════════════════════════════════ */
 function finalizar() {
   var btn = document.getElementById('btnVerResultado');
@@ -1209,9 +1203,12 @@ function finalizar() {
   var last    = partes.slice(1).join(' ') || '';
   var eventId = 'lead-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
 
-  // ① Guarda no sessionStorage
+  var payload = construirPayload(tel, first, last, score, eventId);
+
+  // ① Guarda no sessionStorage (o resultado.html renderiza + usa como fallback de envio)
   try {
-    sessionStorage.setItem(SESS_KEY, JSON.stringify({ A: A, score: score }));
+    sessionStorage.setItem(SESS_KEY, JSON.stringify({ A: A, score: score, payload: payload }));
+    sessionStorage.removeItem(WH_OK_KEY);
   } catch (e) {}
 
   // ② Meta Pixel — Advanced Matching
@@ -1225,13 +1222,25 @@ function finalizar() {
     }, { eventID: eventId });
   }
 
-  // ③ Envia webhook AQUI (sendBeacon sobrevive ao redirect)
-  enviarWebhook(tel, first, last, score, eventId);
-
-  // ④ Redireciona após 900ms (tempo para pixel + beacon)
-  setTimeout(function() {
+  // ③ Envia o lead via proxy e só depois redireciona
+  var feito = false;
+  function irParaResultado() {
+    if (feito) return;
+    feito = true;
     window.location.href = 'resultado.html';
-  }, 900);
+  }
+
+  enviarLead(payload).then(function (r) {
+    try { sessionStorage.setItem(WH_OK_KEY, (r && r.ok) ? '1' : '0'); } catch (e) {}
+    console.log('[Lead] proxy respondeu:', r && r.status);
+    irParaResultado();
+  }, function (e) {
+    console.warn('[Lead] proxy falhou, o resultado.html vai tentar de novo:', e);
+    irParaResultado();   // falhou → o resultado.html tenta novamente
+  });
+
+  // Rede de segurança: se a função demorar, avança na mesma (keepalive conclui o envio)
+  setTimeout(irParaResultado, 3000);
 }
 </script>
 </body>
