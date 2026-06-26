@@ -1,820 +1,620 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex,nofollow">
-<title>O seu resultado · NR Consultoria Imobiliária</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Resultado da sua avaliação estratégica de venda — NR Consultoria Imobiliária.">
+  <title>NR Consultoria — Resultado da Avaliação</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window,document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', 'PIXEL_ID');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=PIXEL_ID&ev=PageView&noscript=1"/></noscript>
+  <!-- End Meta Pixel Code -->
 
-<!-- Meta Pixel Code — PageView APENAS (o Lead foi disparado no index) -->
-<script>
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
-(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init','2486306185154369');
-fbq('track','PageView');
-/* NÃO disparar Lead aqui — já foi disparado no index com eventID único.
-   O PageView deste URL /resultado alimenta a CONVERSÃO PERSONALIZADA POR URL. */
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=2486306185154369&ev=PageView&noscript=1"/></noscript>
-<!-- End Meta Pixel Code -->
+  <style>
+    /* ============================================
+       DESIGN TOKENS
+    ============================================ */
+    :root {
+      --white:       #FFFFFF;
+      --off-white:   #F8F7F5;
+      --black:       #0D0D0D;
+      --text:        #1C1C1C;
+      --text-2:      #565656;
+      --text-3:      #9A9A9A;
+      --red:         #C41230;
+      --red-dark:    #9E0E26;
+      --border:      #E4E2DE;
+      --serif:       'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+      --sans:        'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      --ease-expo:   cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-out:    cubic-bezier(0.33, 1, 0.68, 1);
+    }
 
-<!-- Verificar sessionStorage antes de renderizar
-     Se não houver dados → redirect para evitar conversões falsas -->
-<script>
-(function () {
-  try {
-    var raw = sessionStorage.getItem('sim_nrconsultoria');
-    if (!raw) { window.location.replace('index.html'); }
-  } catch (e) {
-    window.location.replace('index.html');
-  }
-})();
-</script>
+    /* ============================================
+       RESET
+    ============================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
+    body { font-family: var(--sans); color: var(--text); background: var(--white); overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
 
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    /* ============================================
+       GLOBAL PROGRESS BAR
+    ============================================ */
+    #g-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: var(--red);
+      width: 0%;
+      z-index: 9999;
+      transition: width 0.55s var(--ease-out);
+      pointer-events: none;
+    }
 
-:root{
-  --vermelho:#b50103;
-  --vermelho-escuro:#8f0002;
-  --carvao:#3c3c3c;
-  --branco:#ffffff;
-  --cinza-fundo:#f4f4f5;
-  --cinza-borda:#e4e4e7;
-  --cinza-texto:#71717a;
-  --cinza-medio:#52525b;
-  --verde:#15803d;
-  --ambar:#b45309;
-  --rosa-escuro:#9f1239;
-  --wa:#25d366;
-  --radius:12px;
-  --radius-pill:100px;
-  --sombra:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.07);
-  --sombra-hover:0 4px 12px rgba(0,0,0,.1),0 12px 32px rgba(0,0,0,.1);
-  --trans:all .2s cubic-bezier(.4,0,.2,1);
-}
+    /* ============================================
+       RESULTS
+    ============================================ */
+    .res-bar {
+      background: var(--black);
+      padding: 0 56px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .res-bar-logo {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--white);
+    }
+    .res-bar-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.32);
+    }
 
-html{-webkit-text-size-adjust:100%}
-body{
-  font-family:'Inter',sans-serif;
-  background:var(--cinza-fundo);
-  color:var(--carvao);
-  line-height:1.6;
-  min-height:100vh;
-}
+    .res-hero {
+      background: var(--black);
+      padding: 80px 56px 96px;
+      display: flex;
+      align-items: center;
+      gap: clamp(48px, 8vw, 100px);
+      flex-wrap: wrap;
+    }
 
-/* ════════════════════════════════════
-   HEADER
-════════════════════════════════════ */
-.res-header{
-  background:var(--branco);
-  border-bottom:1px solid var(--cinza-borda);
-  padding:14px 24px;
-}
-.res-header__inner{
-  max-width:700px;margin:0 auto;
-  display:flex;align-items:center;gap:10px;
-}
-.hdr-badge{
-  width:34px;height:34px;
-  background:var(--vermelho);border-radius:8px;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Playfair Display',serif;
-  font-weight:700;font-size:14px;color:#fff;
-  flex-shrink:0;
-}
-.hdr-nome{
-  font-size:13px;font-weight:600;
-  color:var(--cinza-medio);
-  letter-spacing:.08em;text-transform:uppercase;
-}
+    .score-wrap {
+      flex-shrink: 0;
+      position: relative;
+      width: 196px;
+      height: 196px;
+    }
+    .score-svg {
+      width: 196px;
+      height: 196px;
+      transform: rotate(-90deg);
+    }
+    .score-track {
+      fill: none;
+      stroke: rgba(255,255,255,0.07);
+      stroke-width: 3.5;
+    }
+    .score-fill {
+      fill: none;
+      stroke: var(--red);
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-dasharray: 534.07;
+      stroke-dashoffset: 534.07;
+      transition: stroke-dashoffset 1.9s var(--ease-expo);
+    }
+    .score-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .score-num {
+      font-family: var(--serif);
+      font-size: 58px;
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1;
+    }
+    .score-of {
+      font-size: 13px;
+      color: rgba(255,255,255,0.32);
+      font-weight: 300;
+      margin-top: 2px;
+    }
 
-/* ════════════════════════════════════
-   HERO DO RESULTADO
-════════════════════════════════════ */
-.res-hero{
-  background:linear-gradient(155deg,#090000 0%,#1e0001 30%,#6b0102 65%,#b50103 100%);
-  padding:48px 24px 56px;
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-}
-.res-hero::before{
-  content:'';
-  position:absolute;inset:0;
-  background:url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=900&q=85') center/cover;
-  opacity:.08;pointer-events:none;
-}
-.res-hero__inner{
-  position:relative;z-index:1;
-  max-width:600px;margin:0 auto;
-}
+    .res-text { flex: 1; min-width: 260px; }
+    .res-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 18px;
+    }
+    .res-eyebrow::before { content: ''; display: block; width: 18px; height: 1px; background: var(--red); }
+    .res-category {
+      font-family: var(--serif);
+      font-size: clamp(30px, 4vw, 50px);
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+      margin-bottom: 22px;
+    }
+    .res-intro {
+      font-size: 14px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.56);
+      line-height: 1.74;
+      max-width: 440px;
+    }
 
-.res-hero__intro{
-  font-size:13px;font-weight:500;
-  color:rgba(255,255,255,.6);
-  letter-spacing:.08em;text-transform:uppercase;
-  margin-bottom:6px;
-}
-.res-hero__saudacao{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(14px,3vw,17px);
-  font-weight:600;color:rgba(255,255,255,.8);
-  margin-bottom:28px;
-}
-.res-hero__saudacao strong{color:#fff}
+    .res-body {
+      padding: 88px 56px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
 
-/* Badge de classificação */
-.badge{
-  display:inline-block;
-  padding:6px 20px;
-  border-radius:var(--radius-pill);
-  font-size:13px;font-weight:700;
-  letter-spacing:.1em;text-transform:uppercase;
-  color:#fff;margin-bottom:20px;
-}
+    .sec-head { margin-bottom: 44px; }
+    .sec-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 14px;
+    }
+    .sec-eyebrow::before { content: ''; display: block; width: 18px; height: 1px; background: var(--red); }
+    .sec-title {
+      font-family: var(--serif);
+      font-size: clamp(24px, 3vw, 38px);
+      font-weight: 400;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      line-height: 1.22;
+      margin-bottom: 10px;
+    }
+    .sec-sub {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-2);
+      line-height: 1.65;
+      max-width: 560px;
+    }
 
-/* Score número */
-.score-numero{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(64px,14vw,96px);
-  font-weight:700;color:#fff;
-  line-height:1;
-  letter-spacing:-.03em;
-}
-.score-dez{
-  font-size:clamp(28px,6vw,42px);
-  color:rgba(255,255,255,.55);
-  font-weight:600;
-}
+    .diag-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 88px;
+    }
+    .diag-card {
+      padding: 36px 30px;
+      border: 1px solid var(--border);
+      background: var(--off-white);
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .diag-card.vis { opacity: 1; transform: translateY(0); }
+    .diag-card:nth-child(2) { transition-delay: 0.12s; }
+    .diag-card:nth-child(3) { transition-delay: 0.24s; }
+    .diag-ico {
+      width: 38px; height: 38px;
+      background: var(--red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .diag-ico svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .diag-title {
+      font-family: var(--serif);
+      font-size: 21px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .diag-body { font-size: 13px; font-weight: 400; color: var(--text-2); line-height: 1.68; }
 
-/* Score bar */
-.score-bar-wrap{
-  max-width:380px;margin:20px auto 0;
-}
-.score-bar-bg{
-  height:8px;background:rgba(255,255,255,.18);
-  border-radius:var(--radius-pill);overflow:hidden;
-}
-.score-bar-fill{
-  height:100%;width:0;
-  background:linear-gradient(90deg,rgba(255,255,255,.6) 0%,#fff 100%);
-  border-radius:var(--radius-pill);
-  transition:width .9s cubic-bezier(.4,0,.2,1);
-}
-.score-bar-labels{
-  display:flex;justify-content:space-between;
-  margin-top:6px;
-}
-.score-bar-labels span{
-  font-size:11px;color:rgba(255,255,255,.45);
-}
+    .res-divider { height: 1px; background: var(--border); margin: 0 0 88px; }
 
-/* Frase de apoio */
-.res-hero__frase{
-  font-size:clamp(14px,3vw,16px);
-  color:rgba(255,255,255,.78);
-  line-height:1.65;
-  max-width:480px;margin:24px auto 0;
-}
+    .timeline { position: relative; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 23px; top: 0; bottom: 0;
+      width: 1px;
+      background: var(--border);
+    }
+    .tl-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 36px;
+      padding-bottom: 48px;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .tl-item.vis { opacity: 1; transform: translateY(0); }
+    .tl-item:nth-child(2) { transition-delay: 0.10s; }
+    .tl-item:nth-child(3) { transition-delay: 0.20s; }
+    .tl-item:nth-child(4) { transition-delay: 0.30s; }
+    .tl-item:nth-child(5) { transition-delay: 0.40s; }
+    .tl-num {
+      flex-shrink: 0;
+      width: 46px; height: 46px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--text);
+      position: relative;
+      z-index: 1;
+    }
+    .tl-item:first-child .tl-num { background: var(--red); border-color: var(--red); color: var(--white); }
+    .tl-content { padding-top: 8px; }
+    .tl-title {
+      font-family: var(--serif);
+      font-size: 21px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .tl-desc { font-size: 13px; color: var(--text-2); line-height: 1.68; max-width: 500px; }
 
-/* ════════════════════════════════════
-   CORPO DO RESULTADO
-════════════════════════════════════ */
-.res-body{
-  max-width:700px;margin:0 auto;
-  padding:32px 20px 64px;
-}
+    .res-cta {
+      background: var(--black);
+      padding: 96px 56px;
+      text-align: center;
+    }
+    .res-cta-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 24px;
+    }
+    .res-cta-title {
+      font-family: var(--serif);
+      font-size: clamp(32px, 5vw, 58px);
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+    .res-cta-title em { font-style: italic; font-weight: 300; }
+    .res-cta-body {
+      font-size: 15px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.48);
+      max-width: 440px;
+      margin: 0 auto 52px;
+      line-height: 1.74;
+    }
+    .btn-wa {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 20px 48px;
+      background: #25D366;
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: background 0.28s ease;
+    }
+    .btn-wa:hover { background: #1DB954; }
 
-/* ── Cards: Prazo + Motivo ── */
-.cards-row{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
-  margin-bottom:32px;
-}
-@media(max-width:420px){.cards-row{grid-template-columns:1fr}}
+    .res-foot {
+      padding: 28px 56px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .res-foot-logo { font-family: var(--serif); font-size: 18px; font-weight: 500; letter-spacing: 0.06em; }
+    .res-foot-txt  { font-size: 11px; color: var(--text-3); }
 
-.card{
-  background:var(--branco);
-  border-radius:var(--radius);
-  padding:20px;
-  box-shadow:var(--sombra);
-  display:flex;flex-direction:column;gap:4px;
-}
-.card__icon{font-size:22px;margin-bottom:6px}
-.card__label{
-  font-size:11px;font-weight:600;
-  color:var(--cinza-texto);
-  text-transform:uppercase;letter-spacing:.07em;
-}
-.card__valor{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(16px,3vw,20px);
-  font-weight:700;color:var(--carvao);
-  line-height:1.25;
-}
-
-/* ── Separador ── */
-.sep{
-  border:none;border-top:1px solid var(--cinza-borda);
-  margin:32px 0;
-}
-
-/* ── Secção títulos ── */
-.sec-titulo{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(18px,3.5vw,22px);
-  font-weight:700;color:var(--carvao);
-  margin-bottom:20px;
-}
-
-/* ── Quote ── */
-.quote-block{
-  background:var(--branco);
-  border-left:4px solid var(--vermelho);
-  border-radius:0 var(--radius) var(--radius) 0;
-  padding:20px 24px;
-  box-shadow:var(--sombra);
-  margin-bottom:32px;
-}
-.quote-block p{
-  font-family:'Playfair Display',serif;
-  font-style:italic;
-  font-size:clamp(15px,2.5vw,17px);
-  color:var(--carvao);
-  line-height:1.7;
-  margin-bottom:10px;
-}
-.quote-block cite{
-  font-size:12px;font-weight:600;
-  color:var(--cinza-texto);
-  font-style:normal;
-  letter-spacing:.06em;text-transform:uppercase;
-}
-
-/* ── Timeline ── */
-.timeline{
-  display:flex;flex-direction:column;gap:0;
-  margin-bottom:4px;
-}
-.timeline-item{
-  display:flex;gap:18px;
-  position:relative;
-  padding-bottom:28px;
-}
-.timeline-item:last-child{padding-bottom:0}
-.timeline-left{
-  display:flex;flex-direction:column;
-  align-items:center;flex-shrink:0;
-}
-.timeline-num{
-  width:36px;height:36px;
-  background:var(--vermelho);
-  border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Playfair Display',serif;
-  font-weight:700;font-size:14px;color:#fff;
-  flex-shrink:0;
-  position:relative;z-index:1;
-}
-.timeline-line{
-  width:2px;flex:1;
-  background:var(--cinza-borda);
-  margin:4px 0;
-}
-.timeline-item:last-child .timeline-line{display:none}
-.timeline-content{padding-top:6px}
-.timeline-etapa{
-  font-size:11px;font-weight:600;
-  color:var(--cinza-texto);
-  text-transform:uppercase;letter-spacing:.07em;
-  margin-bottom:3px;
-}
-.timeline-titulo{
-  font-family:'Playfair Display',serif;
-  font-size:16px;font-weight:700;color:var(--carvao);
-  margin-bottom:5px;
-}
-.timeline-desc{
-  font-size:14px;color:var(--cinza-medio);line-height:1.6;
-}
-
-/* ── Considerações ── */
-.avisos{
-  display:flex;flex-direction:column;gap:14px;
-  margin-top:4px;
-}
-.aviso{
-  background:var(--branco);
-  border-radius:var(--radius);
-  padding:20px 20px 20px 24px;
-  box-shadow:var(--sombra);
-  display:flex;gap:16px;align-items:flex-start;
-}
-.aviso__num{
-  font-family:'Playfair Display',serif;
-  font-weight:700;font-size:22px;
-  color:var(--cinza-borda);
-  line-height:1;flex-shrink:0;
-  padding-top:2px;
-  min-width:28px;
-}
-.aviso__body{}
-.aviso__titulo{
-  font-size:14px;font-weight:700;color:var(--carvao);
-  margin-bottom:4px;
-}
-.aviso__desc{font-size:14px;color:var(--cinza-medio);line-height:1.6}
-
-/* ════════════════════════════════════
-   CTA
-════════════════════════════════════ */
-.cta-section{
-  background:var(--branco);
-  border-radius:var(--radius);
-  padding:32px 24px;
-  box-shadow:var(--sombra);
-  text-align:center;
-  margin-top:32px;
-}
-.cta-section h3{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(18px,3.5vw,22px);
-  font-weight:700;color:var(--carvao);
-  margin-bottom:8px;
-}
-.cta-section p{
-  font-size:14px;color:var(--cinza-texto);
-  margin-bottom:28px;
-  max-width:400px;margin-left:auto;margin-right:auto;
-}
-
-.btn-wa{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  width:100%;max-width:380px;margin:0 auto 12px;
-  padding:17px 24px;
-  background:var(--wa);border:none;border-radius:var(--radius-pill);
-  font-family:'Inter',sans-serif;
-  font-size:16px;font-weight:700;color:#fff;
-  text-decoration:none;
-  cursor:pointer;transition:var(--trans);
-  box-shadow:0 4px 16px rgba(37,211,102,.3);
-}
-.btn-wa:hover{
-  background:#1ebe5d;
-  transform:translateY(-1px);
-  box-shadow:0 6px 24px rgba(37,211,102,.4);
-}
-.btn-wa svg{width:22px;height:22px;flex-shrink:0}
-
-.cta-row{
-  display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
-  margin-top:4px;
-}
-.btn-outline{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:13px 22px;
-  background:transparent;
-  border:2px solid var(--cinza-borda);
-  border-radius:var(--radius-pill);
-  font-family:'Inter',sans-serif;
-  font-size:14px;font-weight:600;color:var(--carvao);
-  text-decoration:none;
-  cursor:pointer;transition:var(--trans);
-}
-.btn-outline:hover{
-  border-color:var(--vermelho);
-  color:var(--vermelho);
-}
-
-/* ════════════════════════════════════
-   FOOTER
-════════════════════════════════════ */
-.res-footer{
-  text-align:center;
-  padding:24px 20px;
-  font-size:12px;color:var(--cinza-texto);
-  border-top:1px solid var(--cinza-borda);
-  background:var(--branco);
-}
-.res-footer a{color:var(--cinza-texto);text-decoration:none}
-.res-footer a:hover{color:var(--vermelho)}
-
-/* ════════════════════════════════════
-   RESPONSIVE
-════════════════════════════════════ */
-@media(max-width:480px){
-  .res-body{padding:24px 16px 56px}
-  .aviso{padding:16px 16px 16px 18px}
-  .cta-section{padding:24px 16px}
-}
-</style>
+    /* ============================================
+       RESPONSIVE
+    ============================================ */
+    @media (max-width: 768px) {
+      .res-bar   { padding: 0 24px; }
+      .res-hero  { padding: 60px 24px 72px; flex-direction: column; align-items: flex-start; gap: 36px; }
+      .res-body  { padding: 56px 24px; }
+      .res-divider { margin-bottom: 56px; }
+      .res-cta   { padding: 64px 24px; }
+      .res-foot  { padding: 24px; flex-direction: column; align-items: flex-start; }
+      .diag-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- ════════════ HEADER ════════════ -->
-<header class="res-header">
-  <div class="res-header__inner">
-    <div class="hdr-badge" aria-hidden="true">NR</div>
-    <span class="hdr-nome">NR Consultoria Imobiliária</span>
-  </div>
-</header>
+<div id="g-progress"></div>
 
-<!-- ════════════ HERO RESULTADO ════════════ -->
-<section class="res-hero">
-  <div class="res-hero__inner">
+<!-- ════════════ RESULTS ════════════ -->
+<div class="res-bar">
+  <div class="res-bar-logo">NR</div>
+  <div class="res-bar-tag">Relatório de Avaliação Estratégica</div>
+</div>
 
-    <p class="res-hero__intro">O seu resultado</p>
-    <p class="res-hero__saudacao" id="saudacao">
-      O seu perfil de viabilidade é:
-    </p>
-
-    <span class="badge" id="badge">…</span>
-
-    <div>
-      <span class="score-numero" id="scoreNum">0</span>
-      <span class="score-dez">&nbsp;/ 10</span>
-    </div>
-
-    <div class="score-bar-wrap" role="progressbar"
-         aria-label="Score de viabilidade" aria-valuemin="0" aria-valuemax="10">
-      <div class="score-bar-bg">
-        <div class="score-bar-fill" id="scoreBar"></div>
-      </div>
-      <div class="score-bar-labels">
-        <span>0</span>
-        <span>5</span>
-        <span>10</span>
-      </div>
-    </div>
-
-    <p class="res-hero__frase" id="frase"></p>
-
-  </div>
-</section>
-
-<!-- ════════════ CORPO ════════════ -->
-<main class="res-body">
-
-  <!-- Cards Prazo + Motivo -->
-  <div class="cards-row">
-    <div class="card">
-      <span class="card__icon" aria-hidden="true">⏱</span>
-      <span class="card__label">Prazo indicado</span>
-      <span class="card__valor" id="cardPrazo">—</span>
-    </div>
-    <div class="card">
-      <span class="card__icon" aria-hidden="true">💡</span>
-      <span class="card__label">Motivo principal</span>
-      <span class="card__valor" id="cardMotivo">—</span>
+<div class="res-hero">
+  <div class="score-wrap">
+    <svg class="score-svg" viewBox="0 0 196 196">
+      <circle class="score-track" cx="98" cy="98" r="85"/>
+      <circle class="score-fill"  id="score-arc" cx="98" cy="98" r="85"/>
+    </svg>
+    <div class="score-inner">
+      <span class="score-num" id="score-num">0</span>
+      <span class="score-of">/ 100</span>
     </div>
   </div>
+  <div class="res-text">
+    <div class="res-eyebrow">Potencial de Venda</div>
+    <div class="res-category" id="res-cat"></div>
+    <p class="res-intro" id="res-intro"></p>
+  </div>
+</div>
 
-  <!-- Quote -->
-  <blockquote class="quote-block">
-    <p>
-      "A troca de casa é um dos maiores movimentos financeiros da vida.
-      Com as decisões certas e o acompanhamento de um consultor experiente,
-      o processo torna-se mais simples, seguro e vantajoso."
-    </p>
-    <cite>NR Consultoria Imobiliária</cite>
-  </blockquote>
+<div class="res-body">
 
-  <hr class="sep">
+  <div class="sec-head">
+    <div class="sec-eyebrow">Diagnóstico Inicial</div>
+    <div class="sec-title">Pontos identificados na sua avaliação</div>
+    <div class="sec-sub">Com base no seu perfil, destacamos os seguintes aspetos relevantes para a comercialização do seu imóvel.</div>
+  </div>
 
-  <!-- Timeline -->
-  <h2 class="sec-titulo">O processo de troca de casa</h2>
-  <div class="timeline" role="list">
+  <div class="diag-grid" id="diag-grid"></div>
 
-    <div class="timeline-item" role="listitem">
-      <div class="timeline-left">
-        <div class="timeline-num">1</div>
-        <div class="timeline-line"></div>
-      </div>
-      <div class="timeline-content">
-        <p class="timeline-etapa">Etapa 1</p>
-        <p class="timeline-titulo">Avaliação do imóvel atual</p>
-        <p class="timeline-desc">
-          Compreender o valor real do que tem para vender é o ponto de partida.
-          Uma avaliação rigorosa define o seu poder negocial e evita surpresas durante o processo.
-        </p>
-      </div>
-    </div>
+  <div class="res-divider"></div>
 
-    <div class="timeline-item" role="listitem">
-      <div class="timeline-left">
-        <div class="timeline-num">2</div>
-        <div class="timeline-line"></div>
-      </div>
-      <div class="timeline-content">
-        <p class="timeline-etapa">Etapa 2</p>
-        <p class="timeline-titulo">Definição da estratégia</p>
-        <p class="timeline-desc">
-          Vender primeiro ou comprar primeiro? A resposta depende da sua situação financeira
-          e das condições do mercado — é aqui que a consultoria especializada faz toda a diferença.
-        </p>
+  <div class="sec-head">
+    <div class="sec-eyebrow">Processo de Venda</div>
+    <div class="sec-title">O caminho até à escritura</div>
+    <div class="sec-sub">Uma metodologia estruturada e transparente, desenvolvida para maximizar o valor do seu imóvel em cada etapa.</div>
+  </div>
+
+  <div class="timeline" id="timeline">
+    <div class="tl-item">
+      <div class="tl-num">1</div>
+      <div class="tl-content">
+        <div class="tl-title">Avaliação do Imóvel</div>
+        <div class="tl-desc">Análise presencial detalhada, comparação rigorosa com o mercado atual e definição do preço estratégico que maximiza valor e velocidade de venda.</div>
       </div>
     </div>
-
-    <div class="timeline-item" role="listitem">
-      <div class="timeline-left">
-        <div class="timeline-num">3</div>
-        <div class="timeline-line"></div>
-      </div>
-      <div class="timeline-content">
-        <p class="timeline-etapa">Etapa 3</p>
-        <p class="timeline-titulo">Escritura e mudança</p>
-        <p class="timeline-desc">
-          Com as negociações concluídas, coordenamos as duas escrituras para que
-          a transição seja fluida, sem sobreposição de encargos nem períodos em vazio.
-        </p>
+    <div class="tl-item">
+      <div class="tl-num">2</div>
+      <div class="tl-content">
+        <div class="tl-title">Definição da Estratégia</div>
+        <div class="tl-desc">Criação do plano de marketing personalizado: fotografia e vídeo profissional, descrição editorial do imóvel e estratégia de divulgação multicanal.</div>
       </div>
     </div>
-
-  </div><!-- /timeline -->
-
-  <hr class="sep">
-
-  <!-- O que deve considerar -->
-  <h2 class="sec-titulo">O que deve considerar antes de avançar</h2>
-  <div class="avisos">
-
-    <div class="aviso">
-      <span class="aviso__num" aria-hidden="true">01</span>
-      <div class="aviso__body">
-        <p class="aviso__titulo">Conheça o valor real do seu imóvel</p>
-        <p class="aviso__desc">
-          Não assuma o valor — confirme-o. Uma avaliação profissional pode fazer
-          diferença de dezenas de milhares de euros no seu poder de negociação
-          e na estratégia que vai definir.
-        </p>
+    <div class="tl-item">
+      <div class="tl-num">3</div>
+      <div class="tl-content">
+        <div class="tl-title">Divulgação para Compradores Qualificados</div>
+        <div class="tl-desc">Acesso à nossa base de compradores qualificados e divulgação estratégica nos principais portais e canais digitais, com acompanhamento semanal.</div>
       </div>
     </div>
-
-    <div class="aviso">
-      <span class="aviso__num" aria-hidden="true">02</span>
-      <div class="aviso__body">
-        <p class="aviso__titulo">Calcule todos os encargos</p>
-        <p class="aviso__desc">
-          IMT, imposto de selo, registos e comissões podem representar entre 3% e 8%
-          do valor do imóvel. Há surpresas que uma boa preparação antecipada evita
-          — e que podem impactar diretamente a sua margem financeira.
-        </p>
+    <div class="tl-item">
+      <div class="tl-num">4</div>
+      <div class="tl-content">
+        <div class="tl-title">Negociação</div>
+        <div class="tl-desc">Gestão profissional de propostas e contrapropostas, com o objetivo de maximizar o valor final da transação e proteger os seus interesses.</div>
       </div>
     </div>
-
-    <div class="aviso">
-      <span class="aviso__num" aria-hidden="true">03</span>
-      <div class="aviso__body">
-        <p class="aviso__titulo">Crédito habitação</p>
-        <p class="aviso__desc" id="aviso-credito">
-          <!-- Preenchido dinamicamente pelo JS -->
-        </p>
+    <div class="tl-item">
+      <div class="tl-num">5</div>
+      <div class="tl-content">
+        <div class="tl-title">Escritura</div>
+        <div class="tl-desc">Acompanhamento completo de todos os aspetos legais, documentais e administrativos até à conclusão da venda com total tranquilidade.</div>
       </div>
     </div>
+  </div>
 
-  </div><!-- /avisos -->
+</div><!-- /res-body -->
 
-  <!-- CTA -->
-  <div class="cta-section">
-    <h3>Pronto para dar o próximo passo?</h3>
-    <p>
-      Fale com um consultor da NR Consultoria e perceba exatamente
-      como avançar com segurança para a sua próxima casa.
-    </p>
+<div class="res-cta">
+  <div class="res-cta-eyebrow">Próximo Passo</div>
+  <div class="res-cta-title">Fale com um<br><em>consultor especialista</em></div>
+  <p class="res-cta-body" id="res-cta-body"></p>
+  <a href="#" class="btn-wa" id="wa-btn">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+    </svg>
+    Falar com um consultor
+  </a>
+</div>
 
-    <a class="btn-wa"
-       href="https://wa.me/351912798097?text=Ol%C3%A1%2C%20fiz%20o%20simulador%20e%20queria%20falar%20sobre%20a%20minha%20situa%C3%A7%C3%A3o"
-       target="_blank"
-       rel="noopener noreferrer"
-       aria-label="Abrir conversa no WhatsApp">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94
-        1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-        <path d="M12.004 2.003C6.48 2.003 2 6.483 2 12.007c0 1.772.463 3.501 1.345 5.019L2 22l5.09-1.33A9.96 9.96 0 0012.004 22C17.527 22 22 17.52 22 11.996c0-2.666-1.037-5.172-2.92-7.056A9.928 9.928 0 0012.004 2.003zm0 18.18a8.154 8.154 0 01-4.158-1.142l-.298-.178-3.09.809.826-3.015-.194-.31A8.16 8.16 0 013.845 12c0-4.498 3.661-8.16 8.159-8.16 2.18 0 4.226.85 5.766 2.39a8.114 8.114 0 012.39 5.77c0 4.499-3.663 8.163-8.156 8.163z"/>
-      </svg>
-      Falar com um consultor no WhatsApp
-    </a>
+<div class="res-foot">
+  <div class="res-foot-logo">NR</div>
+  <div class="res-foot-txt">NR Consultoria Imobiliária · Avaliação Estratégica de Venda</div>
+  <div class="res-foot-txt">© 2025 Todos os direitos reservados</div>
+</div>
 
-    <div class="cta-row">
-      <a class="btn-outline" href="tel:+351912798097" aria-label="Ligar para NR Consultoria">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.86
-          6.86 19.79 19.79 0 01.79 2.23 2 2 0 012.8.04h3a2 2 0 012 1.72 12.84 12.84 0 00.7
-          2.81 2 2 0 01-.45 2.11L6.91 7.91A16 16 0 0016.09 17.1l1.27-1.27a2 2 0 012.11-.45
-          12.84 12.84 0 002.81.7 2 2 0 011.72 2z"/>
-        </svg>
-        Ligar agora
-      </a>
-      <a class="btn-outline"
-         href="https://www.instagram.com/nr_consultoria.imobiliaria/"
-         target="_blank"
-         rel="noopener noreferrer"
-         aria-label="Perfil Instagram NR Consultoria">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-          <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
-          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-        </svg>
-        Instagram
-      </a>
-    </div>
-
-  </div><!-- /cta-section -->
-
-</main><!-- /res-body -->
-
-<!-- ════════════ FOOTER ════════════ -->
-<footer class="res-footer">
-  <p>
-    © 2025 NR Consultoria Imobiliária · Todos os direitos reservados ·
-    <a href="index.html">Refazer o simulador</a>
-  </p>
-</footer>
-
-<!-- ════════════ JAVASCRIPT ════════════ -->
 <script>
-'use strict';
+(function () {
+  'use strict';
 
-/* ── Constantes ── */
-var WEBHOOK    = 'https://services.leadconnectorhq.com/hooks/pendhQu9igeJQUitYLuK/webhook-trigger/5eD4U41jrhiL2uy6tBdX';
-var ORIGEM     = 'Simulador NR - Facebook Ads';
-var PREFIXO    = '351';
-var WH_FLAG    = 'sim_nrconsultoria_wh';  // trava anti-duplicação por sessão
+  function showResults(score, a) {
+    window.scrollTo(0, 0);
 
-/* ── Ler dados do sessionStorage ── */
-var dados, A, score;
-try {
-  var raw = sessionStorage.getItem('sim_nrconsultoria');
-  dados   = JSON.parse(raw);
-  A       = dados.A;
-  score   = dados.score;
-} catch (e) {
-  window.location.replace('index.html');
-}
+    var cat, intro, ctaTxt;
+    if (score >= 85) {
+      cat    = 'Elevado Potencial de Venda';
+      intro  = 'Com base nas suas respostas, o seu imóvel apresenta um <strong>perfil de elevado potencial de venda</strong>. As condições identificadas são altamente favoráveis para uma comercialização bem-sucedida no prazo desejado.';
+      ctaTxt = 'A sua avaliação revela um perfil excelente. Um dos nossos consultores entrará brevemente em contacto para apresentar uma proposta personalizada e iniciar o processo de venda.';
+    } else if (score >= 70) {
+      cat    = 'Bom Potencial de Venda';
+      intro  = 'O seu imóvel apresenta um <strong>bom potencial de venda</strong>. Com a estratégia certa, é plenamente possível alcançar os seus objetivos dentro do prazo pretendido.';
+      ctaTxt = 'A sua avaliação é positiva. Um consultor da NR irá contactá-lo para definir em conjunto a melhor estratégia para o seu imóvel.';
+    } else if (score >= 55) {
+      cat    = 'Potencial Moderado';
+      intro  = 'O seu imóvel apresenta um <strong>potencial de venda moderado</strong>. Existem fatores que, com a abordagem correta, podem ser otimizados para acelerar a venda e maximizar o valor.';
+      ctaTxt = 'A nossa equipa identificou oportunidades que podem aumentar significativamente o potencial do seu imóvel. Vamos conversar sobre as opções disponíveis.';
+    } else {
+      cat    = 'Potencial a Desenvolver';
+      intro  = 'O seu imóvel apresenta um <strong>potencial que pode ser significativamente desenvolvido</strong>. A nossa consultoria especializada pode identificar as melhores formas de preparar o imóvel para uma venda bem-sucedida.';
+      ctaTxt = 'Com a estratégia certa, é possível maximizar o valor do seu imóvel. Fale connosco para explorar as melhores opções disponíveis.';
+    }
 
-/* ── Helpers ── */
-function primeiroNome(nome) {
-  return ((nome || '').trim().split(/\s+/)[0]) || 'Caro utilizador';
-}
+    document.getElementById('res-cat').textContent   = cat;
+    document.getElementById('res-intro').innerHTML   = intro;
+    document.getElementById('res-cta-body').textContent = ctaTxt;
 
-function labelPrazo(v) {
-  if (v === 'O mais rápido possível') return 'O mais rápido possível';
-  if (v === '<3 meses')               return 'Menos de 3 meses';
-  if (v === '3–6 meses')              return '3 a 6 meses';
-  if (v === '>6 meses')               return 'Mais de 6 meses';
-  return v || '—';
-}
+    var msg = encodeURIComponent(
+      'Olá! Realizei a avaliação estratégica no website da NR e gostaria de saber mais sobre a venda do meu imóvel. O meu nome é ' + (a.nome || 'utilizador') + '.'
+    );
+    document.getElementById('wa-btn').href = 'https://wa.me/351' + msg;
 
-function labelMotivo(v) {
-  if (v === 'Família/espaço')              return 'Família e espaço';
-  if (v === 'Upgrade qualidade de vida')   return 'Upgrade de qualidade de vida';
-  return v || '—';
-}
-
-function getBadge(s) {
-  if (s >= 8) return { texto: 'Excelente',  cor: 'var(--verde)'      };
-  if (s >= 6) return { texto: 'Bom',         cor: 'var(--ambar)'     };
-  return         { texto: 'Moderado',    cor: 'var(--rosa-escuro)' };
-}
-
-function getFrase(s) {
-  if (s >= 8) return 'Está muito bem posicionado para avançar com confiança. O seu perfil financeiro e o prazo disponível criam condições favoráveis para uma transição bem-sucedida.';
-  if (s >= 6) return 'Tem boas condições para avançar, com alguns pontos a afinar. Com o apoio certo, é possível otimizar o processo e reduzir os riscos ao mínimo.';
-  return 'O seu perfil apresenta alguns pontos a reforçar antes de avançar. Com uma estratégia bem definida e acompanhamento especializado, é possível preparar a transição com total segurança.';
-}
-
-/* ── Normalizar telefone (igual ao index) ── */
-function normalizarTel(v) {
-  var d = (v || '').replace(/\D/g, '');
-  if (!d) return '';
-  if (d.indexOf('00') === 0) d = d.slice(2);  // 00351… → 351…
-  if (d.length === 9) d = PREFIXO + d;         // nº local → com indicativo
-  return '+' + d;
-}
-
-/* ── Enviar webhook (GoHighLevel) ─────────────────
-   Reenvia o lead a partir da página de resultado, onde
-   já não há redirect a cancelar o pedido. A trava WH_FLAG
-   garante UM envio por sessão, mesmo com refresh. */
-function enviarWebhook() {
-  // Trava anti-duplicação por sessão
-  try {
-    if (sessionStorage.getItem(WH_FLAG)) return;
-    sessionStorage.setItem(WH_FLAG, '1');
-  } catch (e) { /* sem sessionStorage — segue na mesma */ }
-
-  var tel    = normalizarTel(A.tel);
-  var partes = (A.nome || '').trim().split(/\s+/);
-  var first  = partes[0] || '';
-  var last   = partes.slice(1).join(' ') || '';
-
-  var payload = {
-    // Chaves padrão GHL
-    name:       A.nome || '',
-    first_name: first,
-    last_name:  last,
-    phone:      tel,
-    email:      A.email || '',
-
-    // Metadados
-    timestamp:         new Date().toISOString(),
-    origem:            ORIGEM,
-    pagina_url:        window.location.href,
-    score_viabilidade: Number(score.toFixed(1)),
-
-    // Respostas com rótulos legíveis
-    procura_tipo:        A.procura_tipo || '',
-    procura_tipologia:   A.procura_tipologia || '',
-    procura_localizacao: A.procura_localizacao || '',
-    vender_tipo:         A.vender_tipo || '',
-    vender_tipologia:    A.vender_tipologia || '',
-    vender_estado:       A.vender_estado || '',
-    vender_zona:         A.vender_zona || '',
-    credito_habitacao:   A.credito || '',
-    credito_capital:     A.credito_capital || '',
-    capitais_proprios:   A.capitais_proprios || '',
-    prazo:               A.prazo || '',
-    motivo:              A.motivo || '',
-
-    // Cópia bruta para depuração
-    raw: Object.assign({}, A)
-  };
-
-  try {
-    fetch(WEBHOOK, {
-      method:    'POST',
-      headers:   { 'Content-Type': 'text/plain;charset=UTF-8' },
-      body:      JSON.stringify(payload),
-      keepalive: true
-    });
-  } catch (e) {
-    /* silent fail — lead já guardado no sessionStorage */
-  }
-}
-
-/* ── Preencher DOM ── */
-document.addEventListener('DOMContentLoaded', function () {
-  if (!A || score === undefined) {
-    window.location.replace('index.html');
-    return;
+    setTimeout(function() { animScore(score); }, 280);
+    buildDiagCards(a, score);
+    setupReveal();
   }
 
-  /* Reenvia o lead ao GoHighLevel a partir do resultado */
-  enviarWebhook();
-
-  var badge = getBadge(score);
-
-  /* Saudação */
-  document.getElementById('saudacao').innerHTML =
-    '<strong>' + primeiroNome(A.nome) + '</strong>, o seu perfil de viabilidade é:';
-
-  /* Badge */
-  var badgeEl = document.getElementById('badge');
-  badgeEl.textContent        = badge.texto;
-  badgeEl.style.background   = badge.cor;
-
-  /* Score número */
-  document.getElementById('scoreNum').textContent = score.toFixed(1);
-
-  /* Score bar (animada com delay) */
-  setTimeout(function () {
-    document.getElementById('scoreBar').style.width = (score / 10 * 100).toFixed(1) + '%';
-  }, 350);
-
-  /* Frase */
-  document.getElementById('frase').textContent = getFrase(score);
-
-  /* Cards */
-  document.getElementById('cardPrazo').textContent  = labelPrazo(A.prazo);
-  document.getElementById('cardMotivo').textContent = labelMotivo(A.motivo);
-
-  /* Aviso crédito — texto adapta-se ao estado do crédito */
-  var creditoEl = document.getElementById('aviso-credito');
-  if (A.credito === 'Sim') {
-    creditoEl.textContent =
-      'Tem crédito habitação ativo. Antes de avançar, clarifique com o seu banco as condições ' +
-      'de portabilidade ou liquidação antecipada — taxas de penalização, prazos e condições de ' +
-      'transferência são decisivos para definir a estratégia mais vantajosa.';
-  } else {
-    creditoEl.textContent =
-      'O seu imóvel está pago, o que lhe confere uma vantagem real de flexibilidade financeira. ' +
-      'Para a nova aquisição, prepare antecipadamente o processo de aprovação de crédito: ' +
-      'histórico financeiro, taxa de esforço e documentação têm de estar em ordem para agilizar a aprovação.';
+  function animScore(target) {
+    var numEl = document.getElementById('score-num');
+    var arc   = document.getElementById('score-arc');
+    var C     = 2 * Math.PI * 85;
+    var dur   = 1900;
+    var t0    = performance.now();
+    function step(now) {
+      var elapsed  = now - t0;
+      var progress = Math.min(elapsed / dur, 1);
+      var eased    = 1 - Math.pow(1 - progress, 3);
+      var cur      = Math.round(eased * target);
+      numEl.textContent = cur;
+      arc.style.strokeDashoffset = C - (cur / 100) * C;
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
   }
-});
+
+  function buildDiagCards(a, score) {
+    var grid  = document.getElementById('diag-grid');
+    var cards = makeDiagCards(a, score);
+    grid.innerHTML = cards.map(function(c) {
+      return '<div class="diag-card">' +
+        '<div class="diag-ico"><svg viewBox="0 0 20 20">' + c.ico + '</svg></div>' +
+        '<div class="diag-title">' + c.title + '</div>' +
+        '<div class="diag-body">' + c.body + '</div>' +
+        '</div>';
+    }).join('');
+  }
+
+  function makeDiagCards(a, score) {
+    var cards = [];
+    if (a.estado === 'excelente' || a.estado === 'bom') {
+      cards.push({
+        ico:   '<path d="M3 9.5L10 3l7 6.5V18a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M7 19v-8h6v8"/>',
+        title: 'Estado de Conservação Favorável',
+        body:  'O seu imóvel encontra-se em ' + (a.estado === 'excelente' ? 'excelentes condições' : 'boas condições gerais') + ', o que é um fator determinante para atrair compradores qualificados e alcançar o melhor preço de mercado.'
+      });
+    } else {
+      cards.push({
+        ico:   '<circle cx="10" cy="10" r="8"/><path d="M10 6v4l3 3"/>',
+        title: 'Oportunidade de Valorização',
+        body:  'Um investimento estratégico em obras de melhoria pode aumentar significativamente o valor de venda. A nossa equipa pode orientá-lo sobre as intervenções com maior retorno.'
+      });
+    }
+    if (a.prazo === '3m' || a.prazo === '3a6') {
+      cards.push({
+        ico:   '<circle cx="10" cy="10" r="8"/><path d="M10 5v5l3 3"/>',
+        title: 'Prazo Alinhado com o Mercado',
+        body:  'A sua intenção de vender ' + (a.prazo === '3m' ? 'nos próximos 3 meses' : 'entre 3 a 6 meses') + ' é totalmente viável com a estratégia correta. O mercado atual apresenta condições favoráveis para imóveis com o seu perfil.'
+      });
+    } else {
+      cards.push({
+        ico:   '<circle cx="10" cy="10" r="8"/><path d="M10 5v5l3 3"/>',
+        title: 'Flexibilidade Temporal',
+        body:  'O prazo mais alargado permite planear com maior cuidado a estratégia de venda, preparar o imóvel de forma otimizada e aguardar pelo comprador ideal e pelo melhor preço.'
+      });
+    }
+    if (a.credito === 'nao') {
+      cards.push({
+        ico:   '<path d="M9 12l2 2 4-4"/><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/>',
+        title: 'Imóvel Livre de Encargos',
+        body:  'A ausência de crédito habitação simplifica significativamente o processo de venda, reduz a complexidade burocrática e confere maior flexibilidade na negociação.'
+      });
+    } else {
+      cards.push({
+        ico:   '<path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><path d="M8 12h4m0 0l-2-2m2 2l-2 2"/>',
+        title: 'Experiência em Vendas com Financiamento',
+        body:  'A nossa equipa tem vasta experiência em coordenar processos de venda com crédito habitação associado, garantindo uma transição tranquila e o cumprimento de todos os requisitos bancários.'
+      });
+    }
+    return cards;
+  }
+
+  function setupReveal() {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.diag-card, .tl-item').forEach(function(el) { obs.observe(el); });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var raw = sessionStorage.getItem('nr_avaliacao');
+    if (!raw) { window.location.href = 'index.html'; return; }
+
+    var data    = JSON.parse(raw);
+    var score   = data.score;
+    var answers = data.answers;
+
+    document.getElementById('g-progress').style.width = '100%';
+
+    showResults(score, answers);
+  });
+
+})();
 </script>
 </body>
 </html>
