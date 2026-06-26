@@ -1,1120 +1,813 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Descubra em menos de 3 minutos se a troca de casa é viável para si. Simulador gratuito da NR Consultoria Imobiliária.">
-<title>Simulador de Viabilidade · NR Consultoria Imobiliária</title>
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
-(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init','2486306185154369');
-fbq('track','PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=2486306185154369&ev=PageView&noscript=1"/></noscript>
-<!-- End Meta Pixel Code -->
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --vermelho:#b50103;
-  --vermelho-escuro:#8f0002;
-  --carvao:#3c3c3c;
-  --branco:#ffffff;
-  --cinza-fundo:#f4f4f5;
-  --cinza-borda:#e4e4e7;
-  --cinza-texto:#71717a;
-  --cinza-medio:#52525b;
-  --erro:#dc2626;
-  --radius:10px;
-  --radius-pill:100px;
-  --sombra:0 1px 4px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.06);
-  --sombra-hover:0 4px 12px rgba(0,0,0,.1),0 12px 32px rgba(0,0,0,.1);
-  --trans:all .2s cubic-bezier(.4,0,.2,1);
-}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{
-  font-family:'Inter',sans-serif;
-  background:var(--branco);
-  color:var(--carvao);
-  line-height:1.6;
-  min-height:100vh;
-}
-/* ════════════════════════════════════
-   HERO
-════════════════════════════════════ */
-.hero{
-  position:relative;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  padding:48px 24px 56px;
-  overflow:hidden;
-  background:linear-gradient(155deg,#090000 0%,#1e0001 30%,#6b0102 65%,#b50103 100%);
-}
-.hero__bg{
-  position:absolute;
-  inset:0;
-  background:url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=900&q=85') center/cover no-repeat;
-  opacity:.10;
-  pointer-events:none;
-}
-.hero__content{
-  position:relative;
-  z-index:1;
-  max-width:660px;
-  text-align:center;
-}
-/* Logo */
-.hero__logo{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:36px;
-}
-.hero__badge{
-  width:46px;height:46px;
-  background:var(--vermelho);
-  border:2px solid rgba(255,255,255,.25);
-  border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Playfair Display',serif;
-  font-weight:700;font-size:19px;
-  color:#fff;
-  flex-shrink:0;
-}
-.hero__marca{
-  font-size:13px;font-weight:600;
-  color:rgba(255,255,255,.8);
-  letter-spacing:.1em;text-transform:uppercase;
-}
-/* Tag */
-.hero__tag{
-  display:inline-block;
-  background:rgba(255,255,255,.10);
-  border:1px solid rgba(255,255,255,.18);
-  color:rgba(255,255,255,.85);
-  font-size:12px;font-weight:500;
-  letter-spacing:.09em;text-transform:uppercase;
-  padding:5px 16px;
-  border-radius:var(--radius-pill);
-  margin-bottom:24px;
-}
-/* Heading */
-.hero__h1{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(26px,5.5vw,48px);
-  font-weight:700;
-  color:#fff;
-  line-height:1.18;
-  margin-bottom:20px;
-  letter-spacing:-.01em;
-}
-.hero__h1 em{
-  font-style:italic;
-  color:rgba(255,195,195,.92);
-}
-/* Sub */
-.hero__sub{
-  font-size:clamp(15px,2.4vw,18px);
-  color:rgba(255,255,255,.75);
-  line-height:1.7;
-  max-width:520px;
-  margin:0 auto 36px;
-}
-/* CTA button */
-.btn-hero{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  background:#ffffff;
-  color:var(--vermelho);
-  font-family:'Inter',sans-serif;
-  font-size:16px;font-weight:700;
-  padding:17px 40px;
-  border-radius:var(--radius-pill);
-  border:none;cursor:pointer;
-  transition:var(--trans);
-  box-shadow:0 4px 24px rgba(0,0,0,.22);
-  letter-spacing:.01em;
-}
-.btn-hero:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 32px rgba(0,0,0,.3);
-}
-.btn-hero svg{width:18px;height:18px;flex-shrink:0}
-/* Selos */
-.hero__selos{
-  display:flex;flex-wrap:wrap;
-  justify-content:center;
-  gap:6px 22px;
-  margin-top:32px;
-}
-.hero__selos span{
-  display:flex;align-items:center;gap:7px;
-  font-size:13px;color:rgba(255,255,255,.6);
-}
-.hero__selos span::before{
-  content:'✓';
-  width:18px;height:18px;
-  background:rgba(255,255,255,.14);
-  border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;color:rgba(255,255,255,.85);
-  flex-shrink:0;
-}
-/* ════════════════════════════════════
-   QUIZ WRAPPER
-════════════════════════════════════ */
-.quiz-wrapper{
-  display:none;
-  min-height:100vh;
-  background:var(--cinza-fundo);
-}
-.quiz-wrapper.ativo{display:block}
-/* ── Barra de progresso ── */
-.quiz-progress{
-  background:#fff;
-  border-bottom:1px solid var(--cinza-borda);
-  padding:14px 24px;
-  position:sticky;top:0;z-index:20;
-}
-.quiz-progress__inner{
-  max-width:640px;margin:0 auto;
-}
-.quiz-progress__top{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:10px;
-}
-.quiz-logo{display:flex;align-items:center;gap:8px}
-.quiz-logo__badge{
-  width:30px;height:30px;
-  background:var(--vermelho);border-radius:7px;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Playfair Display',serif;
-  font-weight:700;font-size:12px;color:#fff;
-}
-.quiz-logo__nome{
-  font-size:12px;font-weight:600;
-  color:var(--cinza-medio);letter-spacing:.08em;text-transform:uppercase;
-}
-.quiz-counter{
-  font-size:13px;font-weight:500;color:var(--cinza-texto);
-}
-.quiz-counter strong{color:var(--vermelho);font-weight:700}
-.progress-bg{
-  height:4px;background:var(--cinza-borda);
-  border-radius:var(--radius-pill);overflow:hidden;
-}
-.progress-fill{
-  height:100%;background:var(--vermelho);
-  border-radius:var(--radius-pill);
-  transition:width .45s cubic-bezier(.4,0,.2,1);
-}
-/* ── Conteúdo ── */
-.quiz-content{
-  max-width:640px;margin:0 auto;
-  padding:28px 20px 80px;
-}
-/* ── Passos ── */
-.passo{display:none}
-.passo.ativo{display:block;animation:fadeSlide .3s ease}
-@keyframes fadeSlide{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1;transform:translateY(0)}
-}
-.passo__header{margin-bottom:28px}
-.passo__titulo{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(20px,4vw,26px);
-  font-weight:700;color:var(--carvao);
-  line-height:1.28;margin-bottom:5px;
-}
-.passo__sub{font-size:14px;color:var(--cinza-texto)}
-/* ── Campos ── */
-.campo{margin-bottom:22px}
-.campo__label{
-  display:block;
-  font-size:12px;font-weight:600;
-  color:var(--cinza-medio);
-  text-transform:uppercase;letter-spacing:.07em;
-  margin-bottom:10px;
-}
-/* ── Grelha de opções ── */
-.grelha{display:grid;gap:10px}
-.g2{grid-template-columns:repeat(2,1fr)}
-.g4{grid-template-columns:repeat(4,1fr)}
-.g-span-2{grid-column:1/-1}
-@media(max-width:440px){
-  .g4{grid-template-columns:repeat(2,1fr)}
-}
-.opcao{position:relative}
-.opcao input[type=radio]{
-  position:absolute;opacity:0;width:0;height:0;
-}
-.opcao label{
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  text-align:center;
-  padding:15px 10px;
-  background:#fff;
-  border:2px solid var(--cinza-borda);
-  border-radius:var(--radius);
-  cursor:pointer;
-  transition:var(--trans);
-  font-size:14px;font-weight:500;color:var(--carvao);
-  min-height:64px;gap:5px;
-  user-select:none;
-  line-height:1.3;
-}
-.opcao label:hover{
-  border-color:var(--vermelho);
-  background:#fff8f8;
-}
-.opcao input:checked+label{
-  border-color:var(--vermelho);
-  background:#fff2f2;
-  color:var(--vermelho);
-  font-weight:600;
-  box-shadow:0 0 0 3px rgba(181,1,3,.1);
-}
-.opcao input:focus-visible+label{
-  outline:2px solid var(--vermelho);
-  outline-offset:2px;
-}
-.opcao__icon{font-size:18px;line-height:1}
-/* Radio inline (Sim/Não) */
-.radio-row{display:flex;gap:12px}
-.radio-row .opcao{flex:1}
-.radio-row .opcao label{
-  flex-direction:row;gap:8px;
-  min-height:52px;padding:12px 16px;
-}
-/* ── Campos de texto / select ── */
-.input-txt,.input-sel{
-  width:100%;padding:14px 16px;
-  font-family:'Inter',sans-serif;font-size:15px;
-  color:var(--carvao);
-  background:#fff;
-  border:2px solid var(--cinza-borda);
-  border-radius:var(--radius);
-  transition:var(--trans);
-  outline:none;
-  appearance:none;-webkit-appearance:none;
-}
-.input-txt:focus,.input-sel:focus{
-  border-color:var(--vermelho);
-  box-shadow:0 0 0 3px rgba(181,1,3,.1);
-}
-.campo.erro .input-txt,
-.campo.erro .input-sel{border-color:var(--erro)}
-.campo.erro .grelha .opcao label{border-color:#fca5a5}
-.campo.erro .opcao input:checked+label{
-  border-color:var(--vermelho);
-  box-shadow:0 0 0 3px rgba(181,1,3,.1);
-}
-.sel-wrap{position:relative}
-.sel-wrap::after{
-  content:'';position:absolute;
-  right:14px;top:50%;transform:translateY(-50%);
-  border:5px solid transparent;
-  border-top-color:var(--cinza-texto);
-  border-bottom:none;
-  pointer-events:none;
-  margin-top:3px;
-}
-/* ── Erro msg ── */
-.erro-msg{
-  display:none;
-  font-size:12px;color:var(--erro);
-  margin-top:6px;font-weight:500;
-}
-.campo.erro .erro-msg{display:block}
-/* ── Campos condicionais ── */
-.cond{
-  overflow:hidden;
-  transition:max-height .35s ease,opacity .3s ease,margin-bottom .3s ease;
-}
-.cond.oculto{
-  max-height:0!important;
-  opacity:0;
-  margin-bottom:0!important;
-  pointer-events:none;
-}
-.cond.visivel{
-  max-height:500px;
-  opacity:1;
-}
-/* ── Botões de navegação ── */
-.nav-btns{
-  display:flex;gap:12px;margin-top:32px;
-}
-.btn-voltar{
-  flex:0 0 auto;
-  display:flex;align-items:center;gap:6px;
-  padding:15px 22px;
-  background:transparent;
-  border:2px solid var(--cinza-borda);
-  border-radius:var(--radius-pill);
-  font-family:'Inter',sans-serif;
-  font-size:15px;font-weight:500;color:var(--cinza-medio);
-  cursor:pointer;transition:var(--trans);
-}
-.btn-voltar:hover{border-color:var(--cinza-medio);color:var(--carvao)}
-.btn-avancar{
-  flex:1;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  padding:15px 24px;
-  background:var(--vermelho);border:none;
-  border-radius:var(--radius-pill);
-  font-family:'Inter',sans-serif;
-  font-size:16px;font-weight:700;color:#fff;
-  cursor:pointer;transition:var(--trans);
-}
-.btn-avancar:hover:not(:disabled){
-  background:var(--vermelho-escuro);
-  transform:translateY(-1px);
-  box-shadow:var(--sombra-hover);
-}
-.btn-avancar:disabled{opacity:.6;cursor:not-allowed;transform:none}
-/* Spinner */
-.spinner{
-  width:20px;height:20px;
-  border:2px solid rgba(255,255,255,.35);
-  border-top-color:#fff;
-  border-radius:50%;
-  animation:spin .7s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-/* Footer quiz */
-.quiz-footer{
-  text-align:center;
-  font-size:12px;color:var(--cinza-texto);
-  margin-top:20px;line-height:1.6;
-}
-/* ════════════════════════════════════
-   RESPONSIVE
-════════════════════════════════════ */
-@media(max-width:480px){
-  .quiz-content{padding:24px 16px 80px}
-  .passo__titulo{font-size:20px}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Avaliação estratégica gratuita para proprietários que pretendem vender o seu imóvel. Descubra o potencial real de venda com a NR Consultoria Imobiliária.">
+  <title>NR Consultoria — Avaliação Estratégica de Venda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window,document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', 'PIXEL_ID');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=PIXEL_ID&ev=PageView&noscript=1"/></noscript>
+  <!-- End Meta Pixel Code -->
+
+  <style>
+    /* ============================================
+       DESIGN TOKENS
+    ============================================ */
+    :root {
+      --white:       #FFFFFF;
+      --off-white:   #F8F7F5;
+      --black:       #0D0D0D;
+      --text:        #1C1C1C;
+      --text-2:      #565656;
+      --text-3:      #9A9A9A;
+      --red:         #C41230;
+      --red-dark:    #9E0E26;
+      --red-tint:    #FDF0F3;
+      --border:      #E4E2DE;
+      --border-mid:  #C8C5BF;
+      --serif:       'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+      --sans:        'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      --ease-expo:   cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.87, 0, 0.13, 1);
+      --ease-out:    cubic-bezier(0.33, 1, 0.68, 1);
+    }
+
+    /* ============================================
+       RESET
+    ============================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
+    body { font-family: var(--sans); color: var(--text); background: var(--white); overflow-x: hidden; }
+    button { cursor: pointer; font-family: var(--sans); border: none; background: none; }
+    input  { font-family: var(--sans); }
+    a { text-decoration: none; color: inherit; }
+
+    /* ============================================
+       GLOBAL PROGRESS BAR
+    ============================================ */
+    #g-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: var(--red);
+      width: 0%;
+      z-index: 9999;
+      transition: width 0.55s var(--ease-out);
+      pointer-events: none;
+    }
+
+    /* ============================================
+       HERO
+    ============================================ */
+    #page-hero { display: block; }
+
+    .hero-nav {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 20;
+      padding: 36px 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .hero-logo {
+      font-family: var(--serif);
+      font-size: 26px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--white);
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    .hero-logo-sub {
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+    .hero-nav-links { display: flex; gap: 36px; align-items: center; }
+    .hero-nav-link {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      transition: color 0.3s ease;
+    }
+    .hero-nav-link:hover { color: var(--white); }
+
+    .hero-wrap {
+      position: relative;
+      height: 100vh;
+      min-height: 680px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+      background: #0a0a0a;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=85');
+      background-size: cover;
+      background-position: center 30%;
+      will-change: transform;
+      animation: hero-breathe 14s ease-out forwards;
+    }
+    @keyframes hero-breathe {
+      from { transform: scale(1.07); opacity: 0.8; }
+      to   { transform: scale(1.00); opacity: 1; }
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(5,5,5,0.92) 0%, rgba(8,8,8,0.65) 40%, rgba(8,8,8,0.28) 100%);
+    }
+    .hero-wm {
+      position: absolute;
+      bottom: -60px; right: -30px;
+      font-family: var(--serif);
+      font-size: clamp(160px, 22vw, 340px);
+      font-weight: 300;
+      color: rgba(255,255,255,0.035);
+      letter-spacing: 0.04em;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+      z-index: 5;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      padding: 0 56px 88px;
+      max-width: 900px;
+      animation: hero-up 1.1s var(--ease-expo) 0.2s both;
+    }
+    @keyframes hero-up {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 28px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--red);
+      flex-shrink: 0;
+    }
+    .hero-h1 {
+      font-family: var(--serif);
+      font-size: clamp(44px, 6.5vw, 92px);
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.07;
+      letter-spacing: -0.015em;
+      margin-bottom: 28px;
+    }
+    .hero-h1 em { font-style: italic; font-weight: 300; color: rgba(255,255,255,0.88); }
+    .hero-sub {
+      font-size: clamp(14px, 1.6vw, 17px);
+      font-weight: 300;
+      color: rgba(255,255,255,0.64);
+      line-height: 1.72;
+      max-width: 520px;
+      margin-bottom: 52px;
+    }
+    .hero-actions { display: flex; align-items: center; gap: 36px; flex-wrap: wrap; }
+    .btn-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      padding: 19px 40px;
+      background: var(--red);
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: background 0.28s ease, gap 0.28s ease;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-hero:hover { background: var(--red-dark); gap: 22px; }
+    .hero-trust-row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: rgba(255,255,255,0.42); }
+    .hero-trust-row strong { color: rgba(255,255,255,0.80); font-weight: 600; }
+    .hero-trust-dot { color: rgba(255,255,255,0.2); }
+    .hero-scroll {
+      position: absolute;
+      bottom: 44px; left: 56px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.28);
+      animation: nudge 2.6s ease-in-out infinite;
+    }
+    .hero-scroll::before {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 32px;
+      background: rgba(255,255,255,0.20);
+    }
+    @keyframes nudge {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(6px); }
+    }
+
+    /* ============================================
+       TRUST STRIP
+    ============================================ */
+    .trust-strip {
+      background: var(--black);
+      padding: 0 56px;
+      display: flex;
+      align-items: stretch;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .trust-item {
+      padding: 30px 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .trust-item + .trust-item {
+      border-left: 1px solid rgba(255,255,255,0.08);
+      padding-left: 48px;
+    }
+    .trust-num {
+      font-family: var(--serif);
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .trust-lbl {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: rgba(255,255,255,0.38);
+      line-height: 1.5;
+    }
+
+    /* ============================================
+       QUIZ
+    ============================================ */
+    #page-quiz { display: none; min-height: 100vh; background: var(--white); }
+    #page-quiz.on { display: block; }
+
+    .quiz-topbar {
+      position: sticky;
+      top: 0; z-index: 100;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .quiz-topbar-logo {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--text);
+    }
+    .quiz-topbar-counter { font-size: 12px; font-weight: 500; color: var(--text-3); letter-spacing: 0.06em; }
+    .quiz-topbar-counter span { color: var(--red); font-weight: 700; }
+
+    .quiz-body {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 80px 24px 100px;
+      position: relative;
+      min-height: calc(100vh - 72px);
+    }
+
+    .q-slide { display: none; position: absolute; top: 0; left: 24px; right: 24px; }
+    .q-slide.active   { display: block; animation: slide-in 0.48s var(--ease-expo) both; }
+    .q-slide.exiting  { display: block; animation: slide-out 0.35s var(--ease-in-out) both; pointer-events: none; }
+    .q-slide.back-in  { animation: slide-back-in  0.48s var(--ease-expo) both; }
+    .q-slide.back-out { display: block; animation: slide-back-out 0.35s var(--ease-in-out) both; pointer-events: none; }
+
+    @keyframes slide-in       { from { opacity: 0; transform: translateX(36px); }  to { opacity: 1; transform: translateX(0); } }
+    @keyframes slide-out      { from { opacity: 1; transform: translateX(0); }      to { opacity: 0; transform: translateX(-36px); } }
+    @keyframes slide-back-in  { from { opacity: 0; transform: translateX(-36px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes slide-back-out { from { opacity: 1; transform: translateX(0); }      to { opacity: 0; transform: translateX(36px); } }
+
+    .q-passo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 18px;
+    }
+    .q-passo::before { content: ''; display: block; width: 18px; height: 1px; background: var(--red); }
+
+    .q-title {
+      font-family: var(--serif);
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+      margin-bottom: 10px;
+    }
+    .q-sub {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-2);
+      line-height: 1.68;
+      margin-bottom: 44px;
+      max-width: 520px;
+    }
+
+    .opts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 44px; }
+    .opts-grid.c3 { grid-template-columns: repeat(3, 1fr); }
+    .opts-grid.c1 { grid-template-columns: 1fr; }
+
+    .opt-card {
+      position: relative;
+      padding: 20px 22px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      text-align: left;
+      overflow: hidden;
+      transition: border-color 0.22s ease, background 0.22s ease;
+    }
+    .opt-card::after {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--red);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.25s var(--ease-expo);
+    }
+    .opt-card:hover { border-color: var(--border-mid); background: var(--off-white); }
+    .opt-card.sel   { border-color: var(--red); background: var(--red-tint); }
+    .opt-card.sel::after { transform: scaleY(1); }
+    .opt-name { font-size: 15px; font-weight: 500; color: var(--text); line-height: 1.4; transition: color 0.22s ease; }
+    .opt-card.sel .opt-name { color: var(--red); }
+    .opt-desc { font-size: 12px; font-weight: 400; color: var(--text-3); margin-top: 3px; line-height: 1.4; }
+
+    .text-field-wrap { margin-bottom: 44px; }
+    .text-lbl {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 14px;
+    }
+    .text-inp {
+      width: 100%;
+      padding: 14px 0;
+      border: none;
+      border-bottom: 1px solid var(--border-mid);
+      background: transparent;
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.28s ease;
+    }
+    .text-inp::placeholder { color: var(--text-3); }
+    .text-inp:focus { border-bottom-color: var(--red); }
+
+    .contact-fields { display: flex; flex-direction: column; gap: 40px; margin-bottom: 44px; }
+
+    .q-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      margin-top: 4px;
+    }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--text-3);
+      transition: color 0.25s ease;
+      padding: 8px 0;
+    }
+    .btn-back:hover { color: var(--text); }
+    .btn-back.invisible { visibility: hidden; }
+
+    .btn-next {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 32px;
+      background: var(--black);
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background 0.25s ease, opacity 0.25s ease, gap 0.25s ease;
+    }
+    .btn-next:disabled { opacity: 0.28; cursor: not-allowed; }
+    .btn-next:not(:disabled):hover { background: var(--text-2); gap: 22px; }
+    .btn-next.red { background: var(--red); }
+    .btn-next.red:not(:disabled):hover { background: var(--red-dark); }
+
+    /* ============================================
+       RESPONSIVE
+    ============================================ */
+    @media (max-width: 768px) {
+      .hero-nav { padding: 24px; }
+      .hero-nav-links { display: none; }
+      .hero-content { padding: 0 24px 64px; }
+      .hero-wm { font-size: 140px; bottom: -20px; right: -10px; }
+      .hero-scroll { left: 24px; }
+      .trust-strip { padding: 0 24px; flex-wrap: wrap; }
+      .trust-item { padding: 24px 0; width: 50%; }
+      .trust-item + .trust-item { border-left: none; padding-left: 0; }
+      .trust-item:nth-child(3),
+      .trust-item:nth-child(4) { border-top: 1px solid rgba(255,255,255,0.08); }
+      .quiz-topbar { padding: 0 24px; }
+      .quiz-body { padding: 56px 0 80px; }
+      .q-slide { left: 0; right: 0; padding: 0 24px; }
+      .opts-grid { grid-template-columns: 1fr; }
+      .opts-grid.c3 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .hero-h1 { font-size: 38px; }
+      .btn-hero { padding: 16px 28px; font-size: 11px; }
+      .hero-actions { flex-direction: column; align-items: flex-start; gap: 20px; }
+    }
+  </style>
 </head>
 <body>
+
+<div id="g-progress"></div>
+
 <!-- ════════════ HERO ════════════ -->
-<section class="hero" id="hero">
-  <div class="hero__bg" aria-hidden="true"></div>
-  <div class="hero__content">
-    <div class="hero__logo">
-      <div class="hero__badge">NR</div>
-      <span class="hero__marca">NR Consultoria Imobiliária</span>
-    </div>
-    <span class="hero__tag">Simulador gratuito · 100% confidencial</span>
-    <h1 class="hero__h1">
-      A sua próxima casa já existe.<br>
-      <em>Falta perceber se está pronto para a ter.</em>
-    </h1>
-    <p class="hero__sub">
-      Responda a 5 perguntas e descubra, em menos de 3 minutos,
-      se a troca de casa é viável para si — e quais os próximos passos
-      para avançar com segurança.
-    </p>
-    <button class="btn-hero" onclick="iniciarQuiz()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <polyline points="9 18 15 12 9 6"/>
-      </svg>
-      Começar o Simulador
-    </button>
-    <div class="hero__selos" aria-label="Garantias">
-      <span>Menos de 3 minutos</span>
-      <span>Sem compromisso</span>
-      <span>Resultado imediato</span>
-    </div>
-  </div>
-</section>
-<!-- ════════════ QUIZ ════════════ -->
-<div class="quiz-wrapper" id="quizWrapper" role="main">
-  <!-- Barra de progresso -->
-  <div class="quiz-progress" role="progressbar" aria-label="Progresso do simulador">
-    <div class="quiz-progress__inner">
-      <div class="quiz-progress__top">
-        <div class="quiz-logo">
-          <div class="quiz-logo__badge" aria-hidden="true">NR</div>
-          <span class="quiz-logo__nome">NR Consultoria</span>
-        </div>
-        <span class="quiz-counter">
-          Passo <strong id="stepAtual">1</strong> de <strong>5</strong>
-        </span>
+<div id="page-hero">
+  <div class="hero-wrap">
+    <nav class="hero-nav">
+      <div class="hero-logo">NR <span class="hero-logo-sub">Consultoria Imobiliária</span></div>
+      <div class="hero-nav-links">
+        <a href="tel:+351" class="hero-nav-link">Contacto</a>
+        <a href="#" class="hero-nav-link" id="hero-nav-cta">Avaliação Gratuita</a>
       </div>
-      <div class="progress-bg">
-        <div class="progress-fill" id="progressFill" style="width:20%"></div>
-      </div>
-    </div>
-  </div>
-  <!-- Conteúdo do quiz -->
-  <div class="quiz-content">
-    <!-- ══════ PASSO 1 ══════ -->
-    <div class="passo ativo" id="passo1">
-      <div class="passo__header">
-        <h2 class="passo__titulo">O que procura?</h2>
-        <p class="passo__sub">Diga-nos o tipo de imóvel que tem em mente.</p>
-      </div>
-      <div class="campo" id="c-proc-tipo">
-        <label class="campo__label">Tipo de imóvel</label>
-        <div class="grelha g2">
-          <div class="opcao">
-            <input type="radio" name="procura_tipo" id="pt-apt" value="Apartamento">
-            <label for="pt-apt">
-              <span class="opcao__icon" aria-hidden="true">🏢</span>
-              Apartamento
-            </label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="procura_tipo" id="pt-mor" value="Moradia">
-            <label for="pt-mor">
-              <span class="opcao__icon" aria-hidden="true">🏡</span>
-              Moradia
-            </label>
-          </div>
-        </div>
-        <span class="erro-msg" role="alert">Por favor, selecione o tipo de imóvel.</span>
-      </div>
-      <div class="campo" id="c-proc-tip">
-        <label class="campo__label">Tipologia pretendida</label>
-        <div class="grelha g4">
-          <div class="opcao">
-            <input type="radio" name="procura_tipologia" id="ptip-t1" value="T1">
-            <label for="ptip-t1">T1</label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="procura_tipologia" id="ptip-t2" value="T2">
-            <label for="ptip-t2">T2</label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="procura_tipologia" id="ptip-t3" value="T3">
-            <label for="ptip-t3">T3</label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="procura_tipologia" id="ptip-t4" value="T4+">
-            <label for="ptip-t4">T4+</label>
-          </div>
-        </div>
-        <span class="erro-msg" role="alert">Por favor, selecione a tipologia.</span>
-      </div>
-      <div class="campo" id="c-proc-loc">
-        <label class="campo__label" for="inp-loc">Localização pretendida</label>
-        <input type="text" id="inp-loc" class="input-txt"
-               placeholder="Ex: Lisboa, Cascais, Porto…"
-               autocomplete="off">
-        <span class="erro-msg" role="alert">Por favor, indique a localização pretendida.</span>
-      </div>
-      <div class="nav-btns">
-        <button class="btn-avancar" onclick="avancar(1)">
-          Continuar
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="9 18 15 12 9 6"/>
-          </svg>
-        </button>
-      </div>
-      <p class="quiz-footer">🔒 Os seus dados são 100% confidenciais</p>
-    </div>
-    <!-- ══════ PASSO 2 ══════ -->
-    <div class="passo" id="passo2">
-      <div class="passo__header">
-        <h2 class="passo__titulo">O que precisa de vender?</h2>
-        <p class="passo__sub">Diga-nos o que tem atualmente — se tiver algo para vender.</p>
-      </div>
-      <div class="campo" id="c-vend-tipo">
-        <label class="campo__label">Tipo a vender</label>
-        <div class="grelha g2">
-          <div class="opcao">
-            <input type="radio" name="vender_tipo" id="vt-apt" value="Apartamento" onchange="atualizarP2()">
-            <label for="vt-apt">
-              <span class="opcao__icon" aria-hidden="true">🏢</span>
-              Apartamento
-            </label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="vender_tipo" id="vt-mor" value="Moradia" onchange="atualizarP2()">
-            <label for="vt-mor">
-              <span class="opcao__icon" aria-hidden="true">🏡</span>
-              Moradia
-            </label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="vender_tipo" id="vt-ter" value="Terreno" onchange="atualizarP2()">
-            <label for="vt-ter">
-              <span class="opcao__icon" aria-hidden="true">🌿</span>
-              Terreno
-            </label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="vender_tipo" id="vt-nao" value="Não preciso de vender" onchange="atualizarP2()">
-            <label for="vt-nao">
-              <span class="opcao__icon" aria-hidden="true">✋</span>
-              Não preciso de vender
-            </label>
-          </div>
-        </div>
-        <span class="erro-msg" role="alert">Por favor, selecione uma opção.</span>
-      </div>
-      <!-- Condicional: ocultar se Terreno ou Não preciso -->
-      <div class="campo cond oculto" id="c-vend-tip">
-        <label class="campo__label">Tipologia atual</label>
-        <div class="grelha g4">
-          <div class="opcao">
-            <input type="radio" name="vender_tipologia" id="vtip-t1" value="T1">
-            <label for="vtip-t1">T1</label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="vender_tipologia" id="vtip-t2" value="T2">
-            <label for="vtip-t2">T2</label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="vender_tipologia" id="vtip-t3" value="T3">
-            <label for="vtip-t3">T3</label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="vender_tipologia" id="vtip-t4" value="T4+">
-            <label for="vtip-t4">T4+</label>
-          </div>
-        </div>
-        <span class="erro-msg" role="alert">Por favor, selecione a tipologia.</span>
-      </div>
-      <!-- Condicional: ocultar se Não preciso -->
-      <div class="campo cond oculto" id="c-vend-est">
-        <label class="campo__label" for="sel-est">Estado do imóvel</label>
-        <div class="sel-wrap">
-          <select id="sel-est" class="input-sel">
-            <option value="">Selecione o estado…</option>
-            <option value="Novo/recuperado">Novo ou recuperado</option>
-            <option value="Usado bom estado">Usado, bom estado</option>
-            <option value="Precisa de obras">Precisa de obras</option>
-          </select>
-        </div>
-        <span class="erro-msg" role="alert">Por favor, selecione o estado do imóvel.</span>
-      </div>
-      <!-- Condicional: ocultar se Não preciso -->
-      <div class="campo cond oculto" id="c-vend-zona">
-        <label class="campo__label" for="inp-zona">Zona do imóvel atual</label>
-        <input type="text" id="inp-zona" class="input-txt"
-               placeholder="Ex: Lisboa, Braga, Setúbal…"
-               autocomplete="off">
-        <span class="erro-msg" role="alert">Por favor, indique a zona do imóvel.</span>
-      </div>
-      <div class="nav-btns">
-        <button class="btn-voltar" onclick="voltar(2)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="15 18 9 12 15 6"/>
-          </svg>
-          Voltar
-        </button>
-        <button class="btn-avancar" onclick="avancar(2)">
-          Continuar
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="9 18 15 12 9 6"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-    <!-- ══════ PASSO 3 ══════ -->
-    <div class="passo" id="passo3">
-      <div class="passo__header">
-        <h2 class="passo__titulo">Vamos perceber a sua margem de manobra</h2>
-        <p class="passo__sub">Estes dados são confidenciais e servem apenas para calcular a viabilidade.</p>
-      </div>
-      <div class="campo" id="c-cred">
-        <label class="campo__label">Tem crédito habitação ativo?</label>
-        <div class="radio-row">
-          <div class="opcao">
-            <input type="radio" name="credito" id="cr-sim" value="Sim" onchange="atualizarP3()">
-            <label for="cr-sim">✅ Sim</label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="credito" id="cr-nao" value="Não" onchange="atualizarP3()">
-            <label for="cr-nao">❌ Não</label>
-          </div>
-        </div>
-        <span class="erro-msg" role="alert">Por favor, selecione uma opção.</span>
-      </div>
-      <!-- Condicional: só mostrar se Sim -->
-      <div class="campo cond oculto" id="c-cred-cap">
-        <label class="campo__label" for="sel-cap">Capital em dívida</label>
-        <div class="sel-wrap">
-          <select id="sel-cap" class="input-sel">
-            <option value="">Selecione o intervalo…</option>
-            <option value="&lt;50k">Menos de 50 000 €</option>
-            <option value="50–100k">50 000 € – 100 000 €</option>
-            <option value="100–200k">100 000 € – 200 000 €</option>
-            <option value="&gt;200k">Mais de 200 000 €</option>
-          </select>
-        </div>
-        <span class="erro-msg" role="alert">Por favor, selecione o capital em dívida.</span>
-      </div>
-      <div class="campo" id="c-caps">
-        <label class="campo__label">Capitais próprios disponíveis</label>
-        <div class="grelha g2">
-          <div class="opcao">
-            <input type="radio" name="capitais_proprios" id="cap-0" value="Nenhum">
-            <label for="cap-0">Nenhum</label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="capitais_proprios" id="cap-20" value="até 20k">
-            <label for="cap-20">Até 20 000 €</label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="capitais_proprios" id="cap-60" value="20–60k">
-            <label for="cap-60">20 000 – 60 000 €</label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="capitais_proprios" id="cap-mais" value="+60k">
-            <label for="cap-mais">Mais de 60 000 €</label>
-          </div>
-        </div>
-        <span class="erro-msg" role="alert">Por favor, selecione os capitais disponíveis.</span>
-      </div>
-      <div class="nav-btns">
-        <button class="btn-voltar" onclick="voltar(3)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="15 18 9 12 15 6"/>
-          </svg>
-          Voltar
-        </button>
-        <button class="btn-avancar" onclick="avancar(3)">
-          Continuar
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="9 18 15 12 9 6"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-    <!-- ══════ PASSO 4 ══════ -->
-    <div class="passo" id="passo4">
-      <div class="passo__header">
-        <h2 class="passo__titulo">Em quanto tempo quer concretizar?</h2>
-        <p class="passo__sub">O prazo e o motivo ajudam-nos a perceber a sua urgência real.</p>
-      </div>
-      <div class="campo" id="c-prazo">
-        <label class="campo__label">Prazo pretendido</label>
-        <div class="grelha g2">
-          <div class="opcao">
-            <input type="radio" name="prazo" id="pr-1" value="O mais rápido possível">
-            <label for="pr-1">🚀 O mais rápido possível</label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="prazo" id="pr-2" value="&lt;3 meses">
-            <label for="pr-2">⏱ Menos de 3 meses</label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="prazo" id="pr-3" value="3–6 meses">
-            <label for="pr-3">📅 3 a 6 meses</label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="prazo" id="pr-4" value="&gt;6 meses">
-            <label for="pr-4">🗓 Mais de 6 meses</label>
-          </div>
-        </div>
-        <span class="erro-msg" role="alert">Por favor, selecione um prazo.</span>
-      </div>
-      <div class="campo" id="c-motivo">
-        <label class="campo__label">Motivo principal</label>
-        <div class="grelha g2">
-          <div class="opcao">
-            <input type="radio" name="motivo" id="mo-1" value="Família/espaço">
-            <label for="mo-1">👨‍👩‍👧 Família / Espaço</label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="motivo" id="mo-2" value="Mudança de zona">
-            <label for="mo-2">📍 Mudança de zona</label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="motivo" id="mo-3" value="Upgrade qualidade de vida">
-            <label for="mo-3">⭐ Upgrade de qualidade</label>
-          </div>
-          <div class="opcao">
-            <input type="radio" name="motivo" id="mo-4" value="Razões financeiras">
-            <label for="mo-4">💰 Razões financeiras</label>
-          </div>
-          <div class="opcao g-span-2">
-            <input type="radio" name="motivo" id="mo-5" value="Outro">
-            <label for="mo-5">💬 Outro motivo</label>
-          </div>
-        </div>
-        <span class="erro-msg" role="alert">Por favor, selecione o motivo principal.</span>
-      </div>
-      <div class="nav-btns">
-        <button class="btn-voltar" onclick="voltar(4)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="15 18 9 12 15 6"/>
-          </svg>
-          Voltar
-        </button>
-        <button class="btn-avancar" onclick="avancar(4)">
-          Continuar
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="9 18 15 12 9 6"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-    <!-- ══════ PASSO 5 — Contacto ══════ -->
-    <div class="passo" id="passo5">
-      <div class="passo__header">
-        <h2 class="passo__titulo">Quase lá! Onde enviamos o seu resultado?</h2>
-        <p class="passo__sub">Os seus dados são protegidos e nunca partilhados com terceiros.</p>
-      </div>
-      <div class="campo" id="c-nome">
-        <label class="campo__label" for="inp-nome">Nome completo</label>
-        <input type="text" id="inp-nome" class="input-txt"
-               placeholder="O seu nome completo"
-               autocomplete="name">
-        <span class="erro-msg" role="alert">Por favor, introduza o seu nome (mínimo 2 caracteres).</span>
-      </div>
-      <div class="campo" id="c-tel">
-        <label class="campo__label" for="inp-tel">Telemóvel</label>
-        <input type="tel" id="inp-tel" class="input-txt"
-               placeholder="+351 912 345 678"
-               autocomplete="tel">
-        <span class="erro-msg" role="alert">Por favor, introduza um número de telemóvel válido (mínimo 9 dígitos).</span>
-      </div>
-      <div class="campo" id="c-email">
-        <label class="campo__label" for="inp-email">E-mail</label>
-        <input type="email" id="inp-email" class="input-txt"
-               placeholder="exemplo@email.com"
-               autocomplete="email">
-        <span class="erro-msg" role="alert">Por favor, introduza um endereço de e-mail válido.</span>
-      </div>
-      <div class="nav-btns">
-        <button class="btn-voltar" onclick="voltar(5)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="15 18 9 12 15 6"/>
-          </svg>
-          Voltar
-        </button>
-        <button class="btn-avancar" id="btnVerResultado" onclick="avancar(5)">
-          Ver resultado
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="9 18 15 12 9 6"/>
-          </svg>
-        </button>
-      </div>
-      <p class="quiz-footer">
-        Ao continuar, aceita que a NR Consultoria Imobiliária o contacte.<br>
-        Os seus dados nunca são partilhados com terceiros.
+    </nav>
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-wm" aria-hidden="true">NR</div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Avaliação Estratégica de Venda</div>
+      <h1 class="hero-h1">
+        Sabe o que o seu imóvel<br>
+        <em>realmente vale</em><br>
+        no mercado atual?
+      </h1>
+      <p class="hero-sub">
+        Descubra o potencial real de venda do seu imóvel numa avaliação
+        estratégica e personalizada. Gratuita. Conduzida por especialistas
+        com presença consolidada no mercado imobiliário português.
       </p>
+      <div class="hero-actions">
+        <button class="btn-hero" id="start-btn">
+          Começar avaliação gratuita
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+            <path d="M0 6h14M9 1l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="hero-trust-row">
+          <strong>+847</strong> avaliações realizadas
+          <span class="hero-trust-dot">·</span>
+          <strong>4.9 / 5</strong> satisfação
+        </div>
+      </div>
     </div>
-  </div><!-- /quiz-content -->
-</div><!-- /quiz-wrapper -->
-<!-- ════════════ JAVASCRIPT ════════════ -->
+    <div class="hero-scroll" aria-hidden="true">Scroll</div>
+  </div>
+  <div class="trust-strip">
+    <div class="trust-item">
+      <div class="trust-num">+15 anos</div>
+      <div class="trust-lbl">de experiência<br>no mercado</div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-num">+1.200</div>
+      <div class="trust-lbl">imóveis<br>vendidos</div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-num">97%</div>
+      <div class="trust-lbl">clientes<br>satisfeitos</div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-num">38 dias</div>
+      <div class="trust-lbl">tempo médio<br>de venda</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ QUIZ ════════════ -->
+<div id="page-quiz">
+  <div class="quiz-topbar">
+    <div class="quiz-topbar-logo">NR</div>
+    <div class="quiz-topbar-counter">Questão <span id="q-cur">1</span> de <span id="q-tot">14</span></div>
+  </div>
+  <div class="quiz-body">
+    <div id="slides-wrap"></div>
+  </div>
+</div>
+
 <script>
-'use strict';
-/* ── Constantes ── */
-var PIXEL_ID  = '2486306185154369';
-/* Webhook do GoHighLevel da NR — envio DIRETO (igual ao NewBroker Master).
-   Para mudar o destino dos leads no futuro, basta alterar este URL. */
-var WEBHOOK   = 'https://services.leadconnectorhq.com/hooks/pendhQu9igeJQUitYLuK/webhook-trigger/5eD4U41jrhiL2uy6tBdX';
-var ORIGEM    = 'Simulador NR - Facebook Ads';
-var PREFIXO   = '351';
-var SESS_KEY  = 'sim_nrconsultoria';
-var WH_OK_KEY = 'sim_nrconsultoria_wh_ok';
-var TOTAL_P   = 5;
-/* ── Estado global ── */
-var A          = {};
-var passoAtual = 1;
-/* ════════════════════════════════════
-   INICIAR QUIZ
-════════════════════════════════════ */
-function iniciarQuiz() {
-  document.getElementById('hero').style.display = 'none';
-  document.getElementById('quizWrapper').classList.add('ativo');
-  window.scrollTo(0, 0);
-}
-/* ════════════════════════════════════
-   PROGRESSO
-════════════════════════════════════ */
-function atualizarProgresso(n) {
-  document.getElementById('progressFill').style.width = Math.round(n / TOTAL_P * 100) + '%';
-  document.getElementById('stepAtual').textContent = n;
-}
-/* ════════════════════════════════════
-   LÓGICA CONDICIONAL — PASSO 2
-════════════════════════════════════ */
-function atualizarP2() {
-  var el  = document.querySelector('input[name="vender_tipo"]:checked');
-  var val = el ? el.value : '';
-  var mostrarTip  = (val === 'Apartamento' || val === 'Moradia');
-  var mostrarRest = (val === 'Apartamento' || val === 'Moradia' || val === 'Terreno');
-  toggleCond('c-vend-tip',  mostrarTip);
-  toggleCond('c-vend-est',  mostrarRest);
-  toggleCond('c-vend-zona', mostrarRest);
-  if (!mostrarTip) {
-    document.querySelectorAll('input[name="vender_tipologia"]').forEach(function(r) { r.checked = false; });
-    document.getElementById('c-vend-tip').classList.remove('erro');
-  }
-  if (!mostrarRest) {
-    document.getElementById('sel-est').value = '';
-    document.getElementById('inp-zona').value = '';
-    document.getElementById('c-vend-est').classList.remove('erro');
-    document.getElementById('c-vend-zona').classList.remove('erro');
-  }
-}
-/* ════════════════════════════════════
-   LÓGICA CONDICIONAL — PASSO 3
-════════════════════════════════════ */
-function atualizarP3() {
-  var el  = document.querySelector('input[name="credito"]:checked');
-  var val = el ? el.value : '';
-  var mostrar = (val === 'Sim');
-  toggleCond('c-cred-cap', mostrar);
-  if (!mostrar) {
-    document.getElementById('sel-cap').value = '';
-    document.getElementById('c-cred-cap').classList.remove('erro');
-  }
-}
-/* ── Auxiliar toggle condicional ── */
-function toggleCond(id, mostrar) {
-  var el = document.getElementById(id);
-  if (mostrar) {
-    el.classList.remove('oculto');
-    el.classList.add('visivel');
-  } else {
-    el.classList.remove('visivel');
-    el.classList.add('oculto');
-  }
-}
-function isOculto(id) {
-  return document.getElementById(id).classList.contains('oculto');
-}
-/* ════════════════════════════════════
-   VALIDAÇÃO
-════════════════════════════════════ */
-function validarPasso(n) {
-  var ok = true;
-  function chkRad(name, cid) {
-    var el    = document.querySelector('input[name="' + name + '"]:checked');
-    var campo = document.getElementById(cid);
-    if (!el) { campo.classList.add('erro'); ok = false; return ''; }
-    campo.classList.remove('erro');
-    return el.value;
-  }
-  function chkTxt(eid, cid, fn) {
-    var inp   = document.getElementById(eid);
-    var campo = document.getElementById(cid);
-    var v     = inp.value.trim();
-    if (!fn(v)) { campo.classList.add('erro'); ok = false; return ''; }
-    campo.classList.remove('erro');
-    return v;
-  }
-  function chkSel(eid, cid) {
-    var sel   = document.getElementById(eid);
-    var campo = document.getElementById(cid);
-    if (!sel.value) { campo.classList.add('erro'); ok = false; return ''; }
-    campo.classList.remove('erro');
-    return sel.value;
-  }
-  if (n === 1) {
-    A.procura_tipo        = chkRad('procura_tipo',       'c-proc-tipo');
-    A.procura_tipologia   = chkRad('procura_tipologia',  'c-proc-tip');
-    A.procura_localizacao = chkTxt('inp-loc', 'c-proc-loc', function(v) { return v.length > 0; });
-  }
-  if (n === 2) {
-    A.vender_tipo = chkRad('vender_tipo', 'c-vend-tipo');
-    if (!isOculto('c-vend-tip')) {
-      A.vender_tipologia = chkRad('vender_tipologia', 'c-vend-tip');
-    } else {
-      A.vender_tipologia = '';
-      document.getElementById('c-vend-tip').classList.remove('erro');
-    }
-    if (!isOculto('c-vend-est')) {
-      A.vender_estado = chkSel('sel-est', 'c-vend-est');
-    } else {
-      A.vender_estado = '';
-      document.getElementById('c-vend-est').classList.remove('erro');
-    }
-    if (!isOculto('c-vend-zona')) {
-      A.vender_zona = chkTxt('inp-zona', 'c-vend-zona', function(v) { return v.length > 0; });
-    } else {
-      A.vender_zona = '';
-      document.getElementById('c-vend-zona').classList.remove('erro');
-    }
-  }
-  if (n === 3) {
-    A.credito = chkRad('credito', 'c-cred');
-    if (!isOculto('c-cred-cap')) {
-      A.credito_capital = chkSel('sel-cap', 'c-cred-cap');
-    } else {
-      A.credito_capital = '';
-      document.getElementById('c-cred-cap').classList.remove('erro');
-    }
-    A.capitais_proprios = chkRad('capitais_proprios', 'c-caps');
-  }
-  if (n === 4) {
-    A.prazo  = chkRad('prazo',  'c-prazo');
-    A.motivo = chkRad('motivo', 'c-motivo');
-  }
-  if (n === 5) {
-    A.nome  = chkTxt('inp-nome',  'c-nome',  function(v) { return v.length >= 2; });
-    A.tel   = chkTxt('inp-tel',   'c-tel',   function(v) { return v.replace(/\D/g, '').length >= 9; });
-    A.email = chkTxt('inp-email', 'c-email', function(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); });
-  }
-  return ok;
-}
-/* ════════════════════════════════════
-   NAVEGAÇÃO
-════════════════════════════════════ */
-function avancar(n) {
-  if (!validarPasso(n)) {
-    var primeiro = document.querySelector('#passo' + n + ' .campo.erro');
-    if (primeiro) primeiro.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return;
-  }
-  if (n === TOTAL_P) { finalizar(); return; }
-  mostrarPasso(n + 1);
-}
-function voltar(n) {
-  if (n > 1) mostrarPasso(n - 1);
-}
-function mostrarPasso(n) {
-  document.getElementById('passo' + passoAtual).classList.remove('ativo');
-  passoAtual = n;
-  document.getElementById('passo' + passoAtual).classList.add('ativo');
-  atualizarProgresso(passoAtual);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-/* ════════════════════════════════════
-   NORMALIZAR TELEMÓVEL → E.164
-════════════════════════════════════ */
-function normalizarTel(v) {
-  var d = (v || '').replace(/\D/g, '');
-  if (!d) return '';
-  if (d.indexOf('00') === 0) d = d.slice(2);  // 00351… → 351…
-  if (d.length === 9) d = PREFIXO + d;         // nº local → com indicativo
-  return '+' + d;
-}
-/* ════════════════════════════════════
-   CALCULAR SCORE
-════════════════════════════════════ */
-function calcularScore() {
-  var s = 5;
-  // Capitais próprios
-  if (A.capitais_proprios === 'Nenhum') s -= 1;
-  if (A.capitais_proprios === '20–60k') s += 1;
-  if (A.capitais_proprios === '+60k')   s += 2;
-  // Sem crédito (imóvel pago)
-  if (A.credito === 'Não') s += 1;
-  // Capital em dívida > 200k
-  if (A.credito_capital === '>200k') s -= 1;
-  // Prazo
-  if (A.prazo === 'O mais rápido possível') s -= 1;
-  if (A.prazo === '3–6 meses')              s += 1;
-  if (A.prazo === '>6 meses')               s += 1;
-  // Não precisa de vender
-  if (A.vender_tipo === 'Não preciso de vender') s += 1;
-  // Tipo procurado = tipo a vender
-  if (A.procura_tipo && A.vender_tipo && A.procura_tipo === A.vender_tipo) s += 0.5;
-  return Math.max(0, Math.min(10, s));
-}
-/* ════════════════════════════════════
-   CONSTRUIR PAYLOAD DO LEAD
-════════════════════════════════════ */
-function construirPayload(tel, first, last, score, eventId) {
-  return {
-    name:       A.nome || '',
-    first_name: first,
-    last_name:  last,
-    phone:      tel,
-    email:      A.email || '',
-    timestamp:         new Date().toISOString(),
-    origem:            ORIGEM,
-    pagina_url:        window.location.href,
-    event_id:          eventId,
-    score_viabilidade: Number(score.toFixed(1)),
-    procura_tipo:        A.procura_tipo || '',
-    procura_tipologia:   A.procura_tipologia || '',
-    procura_localizacao: A.procura_localizacao || '',
-    vender_tipo:         A.vender_tipo || '',
-    vender_tipologia:    A.vender_tipologia || '',
-    vender_estado:       A.vender_estado || '',
-    vender_zona:         A.vender_zona || '',
-    credito_habitacao:   A.credito || '',
-    credito_capital:     A.credito_capital || '',
-    capitais_proprios:   A.capitais_proprios || '',
-    prazo:               A.prazo || '',
-    motivo:              A.motivo || '',
-    raw: Object.assign({}, A)
+(function () {
+  'use strict';
+
+  var WEBHOOK_URL = 'WEBHOOK_URL';
+
+  var PASSOS = {
+    1: 'Sobre o imóvel',
+    2: 'Sobre a venda',
+    3: 'Objetivos',
+    4: 'Situação atual',
+    5: 'Dados de contacto'
   };
-}
-/* ════════════════════════════════════
-   ENVIAR LEAD  →  Webhook GoHighLevel (envio DIRETO)
-   POST direto para o webhook do GHL, tal como na versão
-   NewBroker Master. keepalive garante que o pedido conclui
-   mesmo depois do redirect para resultado.html.
-════════════════════════════════════ */
-function enviarLead(payload) {
-  return fetch(WEBHOOK, {
-    method:    'POST',
-    headers:   { 'Content-Type': 'application/json' },
-    body:      JSON.stringify(payload),
-    keepalive: true   // sobrevive ao redirect para resultado.html
-  });
-}
-/* ════════════════════════════════════
-   FINALIZAR
-════════════════════════════════════ */
-function finalizar() {
-  var btn = document.getElementById('btnVerResultado');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div> A calcular…';
-  var score   = calcularScore();
-  var tel     = normalizarTel(A.tel);
-  var partes  = (A.nome || '').trim().split(/\s+/);
-  var first   = partes[0] || '';
-  var last    = partes.slice(1).join(' ') || '';
-  var eventId = 'lead-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
-  var payload = construirPayload(tel, first, last, score, eventId);
-  // ① Guarda no sessionStorage (o resultado.html renderiza a partir daqui)
-  try {
-    sessionStorage.setItem(SESS_KEY, JSON.stringify({ A: A, score: score, payload: payload }));
-    sessionStorage.setItem(WH_OK_KEY, '1'); // lead já enviado pelo quiz — resultado.html não reenvia
-  } catch (e) {}
-  // ② Meta Pixel — Advanced Matching + dedup via eventID
-  if (typeof fbq === 'function') {
-    fbq('init', PIXEL_ID, { em: A.email, ph: tel, fn: first, ln: last });
-    fbq('track', 'Lead', {
-      content_name:     ORIGEM,
-      content_category: 'NR Consultoria',
-      value:            Number(score.toFixed(1)),
-      currency:         'EUR'
-    }, { eventID: eventId });
+
+  var QUESTIONS = [
+    { id:'tipo',     passo:1, title:'Qual é o tipo de imóvel?',           sub:'Selecione a opção que melhor descreve o seu imóvel.',                                                       type:'cards', cols:2, opts:[{v:'apartamento',l:'Apartamento'},{v:'moradia',l:'Moradia'},{v:'terreno',l:'Terreno'},{v:'outro',l:'Outro'}] },
+    { id:'tipologia',passo:1, title:'Qual a tipologia do imóvel?',         sub:'Número de quartos ou divisões principais.',                                                                 type:'cards', cols:2, opts:[{v:'t0t1',l:'T0 / T1'},{v:'t2',l:'T2'},{v:'t3',l:'T3'},{v:'t4',l:'T4 ou superior'}] },
+    { id:'concelho', passo:1, title:'Em que concelho se localiza?',         sub:'Indique o município onde o imóvel está situado.',                                                           type:'text',  placeholder:'Ex: Lisboa, Porto, Cascais…', label:'Concelho' },
+    { id:'estado',   passo:1, title:'Qual o estado de conservação?',        sub:'Avaliação geral do estado atual do imóvel.',                                                               type:'cards', cols:2, opts:[{v:'excelente',l:'Excelente',d:'Renovado ou em perfeitas condições'},{v:'bom',l:'Bom',d:'Boas condições, sem obras urgentes'},{v:'razoavel',l:'Razoável',d:'Algumas obras de manutenção necessárias'},{v:'obras',l:'Para renovar',d:'Necessita de obras significativas'}] },
+    { id:'motivo',   passo:2, title:'Qual o principal motivo da venda?',    sub:'Esta informação ajuda-nos a compreender as suas necessidades e a definir a melhor estratégia.',           type:'cards', cols:2, opts:[{v:'mudanca',l:'Mudança de residência'},{v:'financeiro',l:'Razões financeiras'},{v:'heranca',l:'Herança / Família'},{v:'investimento',l:'Desinvestimento'},{v:'outro',l:'Outro motivo'}] },
+    { id:'anunciou', passo:2, title:'Já anunciou o imóvel para venda?',     sub:'Já colocou o imóvel à venda nalguma plataforma ou com outra imobiliária?',                               type:'cards', cols:1, opts:[{v:'nao',l:'Não, ainda não anunciei'},{v:'sim',l:'Sim, já está anunciado'}] },
+    { id:'propostas',passo:2, title:'Já recebeu propostas de compra?',      sub:'Considere propostas formais ou informais que já tenha recebido.',                                         type:'cards', cols:1, opts:[{v:'naoanunciou',l:'Ainda não anunciei'},{v:'sim',l:'Sim, já recebi propostas'},{v:'nao',l:'Não recebi propostas'}] },
+    { id:'prazo',    passo:3, title:'Quando pretende concretizar a venda?', sub:'O prazo desejado influencia diretamente a estratégia de preço e de comercialização.',                    type:'cards', cols:2, opts:[{v:'3m',l:'Nos próximos 3 meses',d:'Venda urgente'},{v:'3a6',l:'Entre 3 a 6 meses',d:'Prazo razoável'},{v:'6a12',l:'Entre 6 a 12 meses',d:'Sem pressão imediata'},{v:'12p',l:'Mais de 1 ano',d:'Ainda em ponderação'}] },
+    { id:'valor',    passo:3, title:'Tem uma expectativa de valor de venda?',sub:'Saber o valor esperado ajuda-nos a alinhar a estratégia com as suas expectativas.',                      type:'cards', cols:1, opts:[{v:'definido',l:'Sim, tenho um valor definido'},{v:'aproximado',l:'Tenho uma ideia aproximada'},{v:'naosabe',l:'Não, prefiro ouvir a avaliação dos especialistas'}] },
+    { id:'comprar',  passo:3, title:'Pretende adquirir outro imóvel após a venda?', sub:'Esta informação permite-nos coordenar melhor o processo, se necessário.',                        type:'cards', cols:1, opts:[{v:'sim',l:'Sim, já tenho algo em mente'},{v:'talvez',l:'Talvez, ainda estou a ponderar'},{v:'nao',l:'Não, não pretendo comprar'}] },
+    { id:'credito',  passo:4, title:'Existe crédito habitação associado ao imóvel?', sub:'A existência de financiamento bancário tem implicações no processo de venda.',                  type:'cards', cols:1, opts:[{v:'nao',l:'Não, o imóvel está livre de encargos'},{v:'sim',l:'Sim, existe crédito habitação'}] },
+    { id:'habitado', passo:4, title:'Qual é a situação de ocupação do imóvel?', sub:'A disponibilidade para visitas é um fator relevante na velocidade de venda.',                        type:'cards', cols:1, opts:[{v:'proprio',l:'Sim, resido no imóvel'},{v:'arrendado',l:'Sim, está arrendado'},{v:'devoluto',l:'Não, o imóvel está devoluto'}] },
+    { id:'visitas',  passo:4, title:'Está disponível para visitas de potenciais compradores?', sub:'A facilidade de visita tem impacto direto na rapidez de venda.',                      type:'cards', cols:1, opts:[{v:'imediato',l:'Imediatamente',d:'Disponível a qualquer momento'},{v:'agendamento',l:'Com agendamento prévio',d:'Com 24 a 48 horas de aviso'},{v:'naodefinido',l:'Ainda não definido',d:'Preciso de coordenar'}] },
+    { id:'contacto', passo:5, title:'Por fim, como podemos contactá-lo?',   sub:'Os seus dados são estritamente confidenciais e utilizados apenas para dar seguimento à sua avaliação.',  type:'contact', isLast:true }
+  ];
+
+  var TOTAL = QUESTIONS.length;
+  var state = { idx:0, answers:{}, dir:'fwd' };
+
+  var gProgress  = document.getElementById('g-progress');
+  var pageHero   = document.getElementById('page-hero');
+  var pageQuiz   = document.getElementById('page-quiz');
+  var slidesWrap = document.getElementById('slides-wrap');
+  var qCur       = document.getElementById('q-cur');
+  var qTot       = document.getElementById('q-tot');
+
+  /* BUILD */
+  function buildSlides() {
+    qTot.textContent = TOTAL;
+    slidesWrap.innerHTML = '';
+    QUESTIONS.forEach(function(q, i) {
+      var slide = document.createElement('div');
+      slide.className = 'q-slide';
+      slide.id = 'slide-' + i;
+      slide.dataset.i = i;
+      var isFirst  = (i === 0);
+      var isLast   = !!q.isLast;
+      var passoLbl = PASSOS[q.passo];
+      var optsHTML = '';
+      if (q.type === 'cards') {
+        var cc = q.cols === 1 ? 'c1' : q.cols === 3 ? 'c3' : '';
+        optsHTML = '<div class="opts-grid ' + cc + '" data-qid="' + q.id + '">' +
+          q.opts.map(function(o) {
+            return '<button class="opt-card" data-v="' + o.v + '" type="button">' +
+              '<div class="opt-name">' + o.l + '</div>' +
+              (o.d ? '<div class="opt-desc">' + o.d + '</div>' : '') +
+              '</button>';
+          }).join('') + '</div>';
+      } else if (q.type === 'text') {
+        optsHTML = '<div class="text-field-wrap">' +
+          '<label class="text-lbl" for="inp-' + q.id + '">' + (q.label || 'Resposta') + '</label>' +
+          '<input class="text-inp" id="inp-' + q.id + '" type="text" placeholder="' + (q.placeholder || '') + '" autocomplete="off" data-qid="' + q.id + '">' +
+          '</div>';
+      } else if (q.type === 'contact') {
+        optsHTML = '<div class="contact-fields">' +
+          '<div class="text-field-wrap" style="margin-bottom:0"><label class="text-lbl" for="inp-nome">Nome completo</label><input class="text-inp contact-inp" id="inp-nome" type="text" placeholder="O seu nome" autocomplete="name"></div>' +
+          '<div class="text-field-wrap" style="margin-bottom:0"><label class="text-lbl" for="inp-tel">Telefone</label><input class="text-inp contact-inp" id="inp-tel" type="tel" placeholder="+351 9XX XXX XXX" autocomplete="tel"></div>' +
+          '<div class="text-field-wrap" style="margin-bottom:0"><label class="text-lbl" for="inp-email">Email</label><input class="text-inp contact-inp" id="inp-email" type="email" placeholder="email@exemplo.com" autocomplete="email"></div>' +
+          '</div>';
+      }
+      slide.innerHTML =
+        '<div class="q-passo">Passo ' + q.passo + ' — ' + passoLbl + '</div>' +
+        '<h2 class="q-title">' + q.title + '</h2>' +
+        '<p class="q-sub">' + q.sub + '</p>' +
+        optsHTML +
+        '<div class="q-nav">' +
+          '<button class="btn-back' + (isFirst ? ' invisible' : '') + '" data-action="back" type="button">' +
+            '<svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M16 6H2M7 1L2 6l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            '&nbsp;Anterior</button>' +
+          '<button class="btn-next' + (isLast ? ' red' : '') + '" data-action="next" type="button" disabled>' +
+            (isLast ? 'Ver a minha avaliação' : 'Continuar') +
+            '<svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M0 6h14M9 1l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            '</button>' +
+        '</div>';
+      slidesWrap.appendChild(slide);
+    });
+    slidesWrap.addEventListener('click', onSlidesClick);
+    slidesWrap.addEventListener('input', onSlidesInput);
   }
-  // ③ Envia o lead DIRETO para o webhook do GHL (fire-and-forget, igual ao NewBroker)
-  try {
-    enviarLead(payload).catch(function () {});
-  } catch (e) {}
-  // ④ Redireciona já para o resultado (keepalive conclui o envio em segundo plano)
-  window.location.href = 'resultado.html';
-}
+
+  function onSlidesClick(e) {
+    var card = e.target.closest('.opt-card');
+    var back = e.target.closest('[data-action="back"]');
+    var next = e.target.closest('[data-action="next"]');
+    if (card) {
+      var grid  = card.closest('.opts-grid');
+      var qid   = grid.dataset.qid;
+      var val   = card.dataset.v;
+      var slide = card.closest('.q-slide');
+      var i     = parseInt(slide.dataset.i, 10);
+      grid.querySelectorAll('.opt-card').forEach(function(c) { c.classList.remove('sel'); });
+      card.classList.add('sel');
+      state.answers[qid] = val;
+      enableNext(i);
+      setTimeout(function() { if (state.idx === i) goNext(i); }, 340);
+    }
+    if (back && !back.classList.contains('invisible')) {
+      goBack(parseInt(back.closest('.q-slide').dataset.i, 10));
+    }
+    if (next && !next.disabled) {
+      var sl = next.closest('.q-slide');
+      var i  = parseInt(sl.dataset.i, 10);
+      if (QUESTIONS[i].isLast) submitQuiz(); else goNext(i);
+    }
+  }
+
+  function onSlidesInput(e) {
+    var inp = e.target;
+    if (inp.matches('.text-inp[data-qid]')) {
+      var i = parseInt(inp.closest('.q-slide').dataset.i, 10);
+      state.answers[inp.dataset.qid] = inp.value.trim();
+      if (inp.value.trim()) enableNext(i); else disableNext(i);
+    }
+    if (inp.matches('.contact-inp')) {
+      var i = parseInt(inp.closest('.q-slide').dataset.i, 10);
+      var ok = document.getElementById('inp-nome').value.trim() &&
+               document.getElementById('inp-tel').value.trim()  &&
+               document.getElementById('inp-email').value.trim();
+      if (ok) enableNext(i); else disableNext(i);
+    }
+  }
+
+  function enableNext(i)  { var b = getNextBtn(i); if (b) b.disabled = false; }
+  function disableNext(i) { var b = getNextBtn(i); if (b) b.disabled = true; }
+  function getNextBtn(i)  { var s = document.getElementById('slide-' + i); return s ? s.querySelector('[data-action="next"]') : null; }
+
+  function goNext(i) { if (i < TOTAL - 1) { state.dir = 'fwd'; transitionTo(i, i + 1); } }
+  function goBack(i) { if (i > 0)          { state.dir = 'bwd'; transitionTo(i, i - 1); } }
+
+  function transitionTo(from, to) {
+    var sf  = document.getElementById('slide-' + from);
+    var st  = document.getElementById('slide-' + to);
+    var fwd = (state.dir === 'fwd');
+    sf.classList.remove('active', 'back-in');
+    sf.classList.add(fwd ? 'exiting' : 'back-out');
+    sf.addEventListener('animationend', function() { sf.classList.remove('exiting', 'back-out'); }, { once:true });
+    st.classList.remove('exiting', 'back-out');
+    st.classList.add('active');
+    if (!fwd) st.classList.add('back-in');
+    state.idx = to;
+    qCur.textContent = to + 1;
+    gProgress.style.width = ((to + 1) / TOTAL * 100) + '%';
+    window.scrollTo({ top:0, behavior:'smooth' });
+    restoreSlide(to);
+  }
+
+  function restoreSlide(i) {
+    var slide = document.getElementById('slide-' + i);
+    var q     = QUESTIONS[i];
+    if (!slide || !q) return;
+    if (q.type === 'cards' && state.answers[q.id]) {
+      var grid = slide.querySelector('.opts-grid');
+      if (grid) {
+        grid.querySelectorAll('.opt-card').forEach(function(c) { c.classList.remove('sel'); });
+        var p = grid.querySelector('[data-v="' + state.answers[q.id] + '"]');
+        if (p) { p.classList.add('sel'); enableNext(i); }
+      }
+    }
+    if (q.type === 'text' && state.answers[q.id]) {
+      var inp = slide.querySelector('.text-inp');
+      if (inp) { inp.value = state.answers[q.id]; enableNext(i); }
+    }
+  }
+
+  function calcScore(a) {
+    var s = 50;
+    var e = { excelente:20, bom:15, razoavel:8, obras:2 };
+    s += (e[a.estado] !== undefined ? e[a.estado] : 8);
+    var p = { '3m':20, '3a6':18, '6a12':12, '12p':5 };
+    s += (p[a.prazo] !== undefined ? p[a.prazo] : 12);
+    if (a.anunciou === 'nao') s += 5;
+    var v = { imediato:10, agendamento:7, naodefinido:3 };
+    s += (v[a.visitas] !== undefined ? v[a.visitas] : 5);
+    if (a.credito === 'nao') s += 5;
+    return Math.min(100, Math.max(0, s));
+  }
+
+  function submitQuiz() {
+    state.answers.nome  = (document.getElementById('inp-nome').value  || '').trim();
+    state.answers.tel   = (document.getElementById('inp-tel').value   || '').trim();
+    state.answers.email = (document.getElementById('inp-email').value || '').trim();
+    var score = calcScore(state.answers);
+
+    sessionStorage.setItem('nr_avaliacao', JSON.stringify({ answers: state.answers, score: score }));
+
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'Lead', { content_name: 'Avaliação Estratégica NR', value: score });
+    }
+
+    if (WEBHOOK_URL && WEBHOOK_URL !== 'WEBHOOK_URL') {
+      try {
+        fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nome: state.answers.nome, telefone: state.answers.tel, email: state.answers.email,
+            score: score, tipo: state.answers.tipo, tipologia: state.answers.tipologia,
+            concelho: state.answers.concelho, estado: state.answers.estado,
+            motivo: state.answers.motivo, anunciou: state.answers.anunciou,
+            propostas: state.answers.propostas, prazo: state.answers.prazo,
+            credito: state.answers.credito, visitas: state.answers.visitas,
+            origem: 'NR — Avaliação Estratégica de Venda', timestamp: new Date().toISOString()
+          })
+        });
+      } catch (_) {}
+    }
+
+    setTimeout(function() { window.location.href = 'resultado.html'; }, 120);
+  }
+
+  function startQuiz() {
+    pageHero.style.display = 'none';
+    pageQuiz.classList.add('on');
+    window.scrollTo(0, 0);
+    var first = document.getElementById('slide-0');
+    if (first) first.classList.add('active');
+    qCur.textContent = 1;
+    gProgress.style.width = (1 / TOTAL * 100) + '%';
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    buildSlides();
+    document.getElementById('start-btn').addEventListener('click', startQuiz);
+    document.getElementById('hero-nav-cta').addEventListener('click', function(e) { e.preventDefault(); startQuiz(); });
+  });
+
+})();
 </script>
 </body>
 </html>
