@@ -470,6 +470,7 @@
     </svg>
     Falar com um consultor
   </a>
+  <p style="margin-top:20px;"><a href="https://www.instagram.com/nr_consultoria.imobiliaria/" target="_blank" style="color:#FFFFFF;text-decoration:none;font-weight:500;">Instagram: @nr_consultoria.imobiliaria</a></p>
 </div>
 
 <div class="res-foot">
@@ -511,7 +512,7 @@
     var msg = encodeURIComponent(
       'Olá! Realizei a avaliação estratégica no website da NR e gostaria de saber mais sobre a venda do meu imóvel. O meu nome é ' + (a.nome || 'utilizador') + '.'
     );
-    document.getElementById('wa-btn').href = 'https://wa.me/351' + msg;
+    document.getElementById('wa-btn').href = 'https://api.whatsapp.com/send?phone=351912798097&text=' + msg;
 
     setTimeout(function() { animScore(score); }, 280);
     buildDiagCards(a, score);
